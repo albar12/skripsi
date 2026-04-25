@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 date_default_timezone_set("Asia/Bangkok");
-require_once $_SERVER['DOCUMENT_ROOT'] . '/skripsi/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/hris/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

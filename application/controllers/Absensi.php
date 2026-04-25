@@ -1,30 +1,31 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 date_default_timezone_set("Asia/Bangkok");
-class Supplier extends CI_Controller
+class Absensi extends CI_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('M_Supplier');
+        $this->load->model('M_Absensi');
         $this->load->database();
     }
     public function index()
     {
         $data = [
-            'title' => 'Data Supplier',
-            'supplier' => $this->M_Supplier->get_supplier()
+            'title' => 'Data Absensi',
+            'absensi' => $this->M_Absensi->get_absensi(),
+            'guru' => $this->M_Absensi->get_guru()
         ];
         $this->load->view('layout/helper_login', $data);
         $this->load->view('layout/header', $data);
         $this->load->view('layout/navbar', $data);
         $this->load->view('layout/sidebar', $data);
-        $this->load->view('supplier/index', $data);
+        $this->load->view('absensi/index', $data);
         $this->load->view('layout/footer');
     }
 
-    public function datasupplier()
+    public function dataabsensi()
     {
         $typesend = $this->input->get('type');
         $reponse = [
@@ -32,7 +33,7 @@ class Supplier extends CI_Controller
             'csrfHash' => $this->security->get_csrf_hash()
         ];
 
-        if ($typesend == 'addsupplier') {
+        if ($typesend == 'addabsensi') {
             $reponse = [
                 'csrfName' => $this->security->get_csrf_token_name(),
                 'csrfHash' => $this->security->get_csrf_hash(),
@@ -42,43 +43,41 @@ class Supplier extends CI_Controller
 
             $validation = [
                 [
-                    'field' => 'nama_supp',
-                    'label' => 'Nama Supplier',
+                    'field' => 'guru',
+                    'label' => 'Guru',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
                 [
-                    'field' => 'alamat_supp',
-                    'label' => 'Alamat Supplier',
-                    'rules' => 'trim|required|xss_clean',
-                    'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
-                ],
-
-                [
-                    'field' => 'tlp_supp',
-                    'label' => 'Nomor Telephone',
+                    'field' => 'status',
+                    'label' => 'Status',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
 
             ];
             $this->form_validation->set_rules($validation);
+            $cek_absensi = $this->M_Absensi->cek_absensi($this->input->post("guru"), $this->input->post("tanggal"));
+
             if ($this->form_validation->run() == FALSE) {
                 $reponse['messages'] = '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>';
+            } else if ($cek_absensi != 0) {
+                $reponse['messages'] = $reponse['messages'] = '<div class="alert alert-danger" role="alert">Data absen sudah ada silahkan periksa kembali data yang diinput</div>';;
             } else {
-                $this->M_Supplier->crudsupplier($typesend);
+                $this->M_Absensi->crudabsensi($typesend);
                 $reponse = [
                     'csrfName' => $this->security->get_csrf_token_name(),
                     'csrfHash' => $this->security->get_csrf_hash(),
                     'success' => true
                 ];
             }
-        } elseif ($typesend == 'delsupplier') {
+        } elseif ($typesend == 'delabsensi') {
 
-            $this->M_Supplier->crudsupplier($typesend);
-        } elseif ($typesend == 'editsupplier') {
-            $data['supplier'] =  $this->M_Supplier->getbyid($this->input->post('id_supp'));
-            $html = $this->load->view('supplier/edit_supplier', $data);
+            $this->M_Absensi->crudabsensi($typesend);
+        } elseif ($typesend == 'editabsensi') {
+            $data['absensi'] =  $this->M_Absensi->getbyid($this->input->post('id_absensi'));
+            $data['guru'] = $this->M_Absensi->get_guru();
+            $html = $this->load->view('absensi/edit_absensi', $data);
             $reponse = [
                 'html' => $html,
                 'csrfName' => $this->security->get_csrf_token_name(),
@@ -89,7 +88,7 @@ class Supplier extends CI_Controller
         echo json_encode($reponse);
     }
 
-    public function editsupplier()
+    public function editabsensi()
     {
         $typesend = $this->input->get('type');
         $reponse = [
@@ -97,7 +96,7 @@ class Supplier extends CI_Controller
             'csrfHash' => $this->security->get_csrf_hash()
         ];
 
-        if ($typesend == 'editsupplieralt') {
+        if ($typesend == 'editabsensialt') {
             $reponse = [
                 'csrfName' => $this->security->get_csrf_token_name(),
                 'csrfHash' => $this->security->get_csrf_hash(),
@@ -107,21 +106,14 @@ class Supplier extends CI_Controller
 
             $validation = [
                 [
-                    'field' => 'nama_supp_edit',
-                    'label' => 'Nama Supplier',
+                    'field' => 'guru_edit',
+                    'label' => 'Guru',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
                 [
-                    'field' => 'alamat_supp_edit',
-                    'label' => 'Alamat Supplier',
-                    'rules' => 'trim|required|xss_clean',
-                    'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
-                ],
-
-                [
-                    'field' => 'tlp_supp_edit',
-                    'label' => 'Nomor Telephone',
+                    'field' => 'status_edit',
+                    'label' => 'Status',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
@@ -131,7 +123,7 @@ class Supplier extends CI_Controller
             if ($this->form_validation->run() == FALSE) {
                 $reponse['messages'] = '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>';
             } else {
-                $this->M_Supplier->crudsupplier($typesend);
+                $this->M_Absensi->crudabsensi($typesend);
                 $reponse = [
                     'csrfName' => $this->security->get_csrf_token_name(),
                     'csrfHash' => $this->security->get_csrf_hash(),

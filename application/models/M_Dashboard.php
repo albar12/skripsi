@@ -45,7 +45,7 @@ class M_Dashboard extends CI_Model
             $dash_tanggal_sampai = date('Y-m-d', strtotime('last day of this month'));
             $this->db->where("tb_barang_masuk.create_date >= '$dash_tanggal_dari 00:00:00' AND tb_barang_masuk.create_date <= '$dash_tanggal_sampai 23:59:59'");
         }
-        $this->db->select('1id_barang_masuk');
+        $this->db->select('id_barang_masuk');
         $this->db->from('tb_barang_masuk');
         $this->db->where("id_status", '1');
         $query = $this->db->get();

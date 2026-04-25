@@ -48,7 +48,7 @@
                 <?= form_open_multipart('#', ['id' => 'login']) ?>
                 <div id="info-data"></div>
                 <div class="input-group mb-3">
-                    <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+                    <input type="text" name="username" id="username" class="form-control" placeholder="Username/NIP">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>

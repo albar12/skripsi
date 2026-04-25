@@ -2,7 +2,7 @@
 
 date_default_timezone_set("Asia/Bangkok");
 //include('koneksi.php');
-require_once $_SERVER['DOCUMENT_ROOT'] . '/skripsi/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/hris/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

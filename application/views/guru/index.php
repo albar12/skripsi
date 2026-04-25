@@ -16,76 +16,62 @@
 <div class="content-wrapper">
     <div class="card mb-4">
         <div class="card-header">
-            <h4 style="color: black;" class="my-1">Data Pelanggan</h4>
+            <h4 style="color: black;" class="my-1">Data Guru</h4>
             <div class="float-right">
-                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addpelangganmodal" id="pelangganadd"><span class="fas fa-user-plus mr-1"></span>Tambah Data Pelanggan</button>
+                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addgurumodal" id="guruadd"><span class="fas fa-user-plus mr-1"></span>Tambah Data Guru</button>
             </div>
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped" id="pelanggan">
+                <table class="table table-bordered table-striped" id="guru">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Nama Pelanggan</th>
-                            <th scope="col">Alamat pelanggan</th>
+                            <th scope="col">NIP</th>
+                            <th scope="col">Nama</th>
                             <th scope="col">Jenis Kelamin</th>
-                            <th scope="col">Telephone Pelanggan</th>
+                            <th scope="col">Jabatan</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        foreach ($pelanggan->result() as $r) { ?>
+                        foreach ($guru->result() as $r) { ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama_pelanggan ?></td>
-                                <?php
-                                $hasil = strlen($r->alamat_pelanggan);
-                                if ($hasil <= 20) {
-                                    $almt = $r->alamat_pelanggan;
-                                } else {
-                                    $alamat_pelanggan = $r->alamat_pelanggan;
-                                    $almt = substr($alamat_pelanggan, 0, 20) . '...';
-                                }
-                                ?>
-                                <td title="<?php echo $r->alamat_pelanggan ?>"><?php echo $almt ?></td>
-                                <td><?php echo $r->jenis_kelamin ?></td>
-                                <td><?php echo $r->tlp_pelanggan ?></td>
+                                <td><?php echo $r->nip ?></td>
+                                <td><?php echo $r->nama ?></td>
+                                <td><?php echo $r->jk ?></td>
+                                <td><?php echo $r->jabatan ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-warning edit-pelanggan" title="Edit Pelanggan" data-pelanggan-id="<?php echo $r->id_pelanggan ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-pelanggan" title="Hapus Pelanggan" data-pelanggan-id="<?php echo $r->id_pelanggan ?>"><span class="fas fa-trash"></span></button>
+                                        <button class="btn btn-xs btn-warning edit-guru" title="Edit Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-user-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-guru" title="Hapus Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-trash"></span></button>
                                     </div>
                                 </td>
                             </tr>
-                        <?php } ?>
+                        <?php
+                            $no++;
+                        } ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="addpelangganmodal" tabindex="-1" role="dialog" aria-labelledby="addpelangganmodal" aria-hidden="true">
+    <div class="modal fade" id="addgurumodal" tabindex="-1" role="dialog" aria-labelledby="addgurumodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="addpelangganmodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Pelanggan</h5>
+                    <h5 class="modal-title text-center" id="addgurumodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Guru</h5>
                 </div>
                 <div class="modal-body">
-                    <?= form_open_multipart('#', ['id' => 'addpelanggan']) ?>
+                    <?= form_open_multipart('#', ['id' => 'addguru']) ?>
                     <div class="form-group row">
-                        <label for="nama_pelanggan" class="col-sm-4 col-form-label">Nama Pelanggan<font color="red">*</font></label>
+                        <label for="nama" class="col-sm-4 col-form-label">Nama Guru<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" name="nama_pelanggan" id="nama_pelanggan">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="alamat_pelanggan" class="col-sm-4 col-form-label">Alamat Pelanggan<font color="red">*</font></label>
-                        <div class="col-sm-8">
-                            <textarea class="form-control form-control-sm" name="alamat_pelanggan" id="alamat_pelanggan" cols="30" rows="10"></textarea>
+                            <input type="text" class="form-control form-control-sm" name="nama" id="nama">
                         </div>
                     </div>
 
@@ -101,9 +87,42 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="tlp_pelanggan" class="col-sm-4 col-form-label">Nomor Telephone<font color="red">*</font></label>
+                        <label for="jabatan" class="col-sm-4 col-form-label">Jabatan<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control form-control-sm" name="tlp_pelanggan" id="tlp_pelanggan">
+                            <select class="form-control form-control-sm" name="jabatan" id="jabatan">
+                                <option selected disabled value="">--Pilih Jabatan--</option>
+                                <option value="Wali Kelas">Wali Kelas</option>
+                                <option value="Guru Penjas">Guru Penjas</option>
+                                <option value="Guru Bhs Inggris">Guru Bhs Inggris</option>
+                                <option value="Guru Agama">Guru Agama</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="nomor_hp" class="col-sm-4 col-form-label">Nomor Handphone<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control form-control-sm" name="nomor_hp" id="nomor_hp">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="alamat" class="col-sm-4 col-form-label">Alamat<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control form-control-sm" name="alamat" id="alamat" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="agama" class="col-sm-4 col-form-label">Agama<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <select class="form-control form-control-sm" name="agama" id="agama">
+                                <option selected disabled value="">--Pilih Agama--</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen">Kristen</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Budha">Budha</option>
+                            </select>
                         </div>
                     </div>
 
@@ -111,21 +130,21 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal"><span class="fas fa-times mr-1"></span>Cancel</button>
-                    <button type="submit" class="btn btn-xs btn-primary" id="addpelanggan-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
+                    <button type="submit" class="btn btn-xs btn-primary" id="addguru-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="editpelangganmodal" tabindex="-1" role="dialog" aria-labelledby="editpelangganmodal" aria-hidden="true">
+    <div class="modal fade" id="editgurumodal" tabindex="-1" role="dialog" aria-labelledby="editgurumodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="editpelangganmodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Pelanggan</h5>
+                    <h5 class="modal-title text-center" id="editgurumodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Guru</h5>
                 </div>
                 <div class="modal-body">
-                    <div id="editdatapelanggan"></div>
+                    <div id="editdataguru"></div>
                 </div>
             </div>
         </div>
@@ -150,18 +169,18 @@
 <script>
     $(document).ready(function() {
 
-        let table = new DataTable('#pelanggan');
+        let table = new DataTable('#guru');
 
 
-        $('#addpelanggan').submit(function(e) {
+        $('#addguru').submit(function(e) {
             e.preventDefault();
             var form = this;
-            $("#addpelanggan-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
+            $("#addguru-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
             var formdata = new FormData(form);
 
             console.log(formdata);
             $.ajax({
-                url: "<?= base_url('index.php/pelanggan/datapelanggan?type=addpelanggan'); ?>",
+                url: "<?= base_url('index.php/guru/dataguru?type=addguru'); ?>",
                 type: 'POST',
                 data: formdata,
                 processData: false,
@@ -171,7 +190,7 @@
                     $("#info-data").hide();
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Menambahkan Pelanggan",
+                        title: "Menambahkan Guru",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -183,51 +202,51 @@
                         $('.text-danger').remove();
                         swal.fire({
                             icon: 'success',
-                            title: 'Penambahan Pelanggan Berhasil',
-                            text: 'Penambahan Pelanggan sudah berhasil !',
+                            title: 'Penambahan Guru Berhasil',
+                            text: 'Penambahan Guru sudah berhasil !',
                             showConfirmButton: false,
                             timer: 1500
                         });
                         location.reload();
                         form.reset();
-                        $("#addpelanggan-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addguru-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     } else {
                         swal.close()
-                        $("#addpelanggan-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addguru-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     }
                 },
                 error: function() {
-                    swal.fire("Penambahan Pelanggan Gagal", "Ada Kesalahan Saat penambahan Pelanggan!", "error");
-                    $("#addpelanggan-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                    swal.fire("Penambahan Guru Gagal", "Ada Kesalahan Saat penambahan Guru!", "error");
+                    $("#addguru-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                 }
             });
 
         });
 
-        $("#pelanggan").on('click', '.delete-pelanggan', function(e) {
+        $("#guru").on('click', '.delete-guru', function(e) {
             e.preventDefault();
-            var id_pelanggan = $(e.currentTarget).attr('data-pelanggan-id');
-            if (id_pelanggan === '') return;
+            var nip = $(e.currentTarget).attr('data-guru-id');
+            if (nip === '') return;
             Swal.fire({
                 title: 'Hapus Data Ini?',
-                text: "Apakah Anda Akan Mengapus Data Ini?",
+                text: "Apakah Anda Akan Menghapus Data Ini?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Hapus',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus'
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: '<?= base_url('index.php/pelanggan/datapelanggan?type=delpelanggan'); ?>',
+                        url: '<?= base_url('index.php/guru/dataguru?type=delguru'); ?>',
                         data: {
-                            id_pelanggan: id_pelanggan
+                            nip: nip
                         },
                         beforeSend: function() {
                             swal.fire({
                                 imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                title: "Menghapus Pelanggan",
+                                title: "Menghapus Data",
                                 text: "Please wait",
                                 showConfirmButton: false,
                                 allowOutsideClick: false
@@ -237,7 +256,7 @@
                             if (data.success == false) {
                                 swal.fire({
                                     icon: 'error',
-                                    title: 'Menghapus Pelanggan Gagal',
+                                    title: 'Menghapus Data Gagal',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -245,7 +264,7 @@
                             } else {
                                 swal.fire({
                                     icon: 'success',
-                                    title: 'Menghapus Pelanggan Berhasil',
+                                    title: 'Menghapus Data Berhasil',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -254,27 +273,27 @@
                             }
                         },
                         error: function() {
-                            swal.fire("Penghapusan Pelanggan Gagal", "Ada Kesalahan Saat menghapus Pelanggan!", "error");
+                            swal.fire("Penghapusan Data Gagal", "Ada Kesalahan Saat menghapus Data!", "error");
                         }
                     });
                 }
             })
         });
 
-        $("#pelanggan").on('click', '.edit-pelanggan', function(e) {
+        $("#guru").on('click', '.edit-guru', function(e) {
             e.preventDefault();
-            var id_pelanggan = $(e.currentTarget).attr('data-pelanggan-id');
-            if (id_pelanggan === '') return;
+            var nip = $(e.currentTarget).attr('data-guru-id');
+            if (nip === '') return;
             $.ajax({
                 type: "POST",
-                url: '<?= base_url('index.php/pelanggan/datapelanggan?type=editpelanggan'); ?>',
+                url: '<?= base_url('index.php/guru/dataguru?type=editguru'); ?>',
                 data: {
-                    id_pelanggan: id_pelanggan
+                    nip: nip
                 },
                 beforeSend: function() {
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Mempersiapkan Edit Barang",
+                        title: "Mempersiapkan Edit Guru",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -282,16 +301,16 @@
                 },
                 success: function(data) {
                     swal.close();
-                    $('#editpelangganmodal').modal('show');
-                    $('#editdatapelanggan').html(data);
+                    $('#editgurumodal').modal('show');
+                    $('#editdataguru').html(data);
 
-                    $('#editpelanggan').submit(function(e) {
+                    $('#editguru').submit(function(e) {
                         e.preventDefault();
                         var form = this;
-                        $("#editpelanggan-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
+                        $("#editguru-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
                         var formdata = new FormData(form);
                         $.ajax({
-                            url: "<?= base_url('index.php/pelanggan/editpelanggan?type=editpelangganalt'); ?>",
+                            url: "<?= base_url('index.php/guru/editguru?type=editgurualt'); ?>",
                             type: 'POST',
                             data: formdata,
                             processData: false,
@@ -300,7 +319,7 @@
                             beforeSend: function() {
                                 swal.fire({
                                     imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                    title: "Menyimpan Data Pelanggan",
+                                    title: "Menyimpan Data User",
                                     text: "Please wait",
                                     showConfirmButton: false,
                                     allowOutsideClick: false
@@ -311,30 +330,30 @@
                                     $('.text-danger').remove();
                                     swal.fire({
                                         icon: 'success',
-                                        title: 'Edit Pelanggan Berhasil',
-                                        text: 'Edit Pelanggan sudah berhasil !',
+                                        title: 'Edit User Berhasil',
+                                        text: 'Edit User sudah berhasil !',
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
                                     location.reload();
                                     form.reset();
-                                    $("#editpelanggan-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editguru-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                 } else {
                                     swal.close()
-                                    $("#editpelanggan-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editguru-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                     $("#info-edit").html(response.messages);
                                 }
                             },
                             error: function() {
-                                swal.fire("Edit Pelanggan Gagal", "Ada Kesalahan Saat pengeditan Pelanggan!", "error");
-                                $("#editpelanggan-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                swal.fire("Edit Guru Gagal", "Ada Kesalahan Saat pengeditan Guru!", "error");
+                                $("#editguru-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                             }
                         });
 
                     });
                 },
                 error: function() {
-                    swal.fire("Edit Pelanggan Gagal", "Ada Kesalahan Saat pengeditan Pelanggan!", "error");
+                    swal.fire("Edit Guru Gagal", "Ada Kesalahan Saat pengeditan Guru!", "error");
                 }
             });
         });

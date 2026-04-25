@@ -11,37 +11,41 @@
 <link rel="stylesheet" href="<?php echo base_url('assets/plugins') ?>/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
 <link rel="stylesheet" href="<?php echo base_url('assets/plugins') ?>/toastr/toastr.min.css">
+
+
 <div class="content-wrapper">
     <div class="card mb-4">
         <div class="card-header">
-            <h4 style="color: black;" class="my-1">Data Produk</h4>
+            <h4 style="color: black;" class="my-1">Data Admin</h4>
             <div class="float-right">
-                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addprodukmodal" id="produkadd"><span class="fas fa-user-plus mr-1"></span>Tambah Data Produk</button>
+                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addadminmodal" id="supplieradd"><span class="fas fa-user-plus mr-1"></span>Tambah Data Admin</button>
             </div>
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped " id="produk">
+                <table class="table table-bordered table-striped " id="admin">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Nama Produk</th>
-                            <th scope="col">Harga Satuan</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        foreach ($produk->result() as $r) { ?>
+                        foreach ($admin->result() as $r) { ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama_produk ?></td>
-                                <td><?php echo 'Rp.' . number_format($r->harga_satuan) ?></td>
+                                <td><?php echo $r->nama_admin ?></td>
+                                <td><?php echo $r->username ?></td>
+                                <td><?php echo $r->role ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-warning edit-produk" title="Edit Produk" data-produk-id="<?php echo $r->id_produk ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-produk" title="Hapus Produk" data-produk-id="<?php echo $r->id_produk ?>"><span class="fas fa-trash"></span></button>
+                                        <button class="btn btn-xs btn-warning edit-admin" title="Edit Admin" data-admin-id="<?php echo $r->id_admin ?>"><span class="fas fa-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-admin" title="Hapus Admin" data-admin-id="<?php echo $r->id_admin ?>"><span class="fas fa-trash"></span></button>
                                     </div>
                                 </td>
                             </tr>
@@ -52,37 +56,44 @@
         </div>
     </div>
 
-    <div class="modal fade" id="addprodukmodal" tabindex="-1" role="dialog" aria-labelledby="addprodukmodal" aria-hidden="true">
+    <div class="modal fade" id="addadminmodal" tabindex="-1" role="dialog" aria-labelledby="addadminmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="addprodukmodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Produk</h5>
+                    <h5 class="modal-title text-center" id="addadminmodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Admin</h5>
                 </div>
                 <div class="modal-body">
-                    <?= form_open_multipart('#', ['id' => 'addproduk']) ?>
+                    <?= form_open_multipart('#', ['id' => 'addadmin']) ?>
                     <div class="form-group row">
-                        <label for="id_kategori" class="col-sm-4 col-form-label">Kategori<font color="red">*</font></label>
+                        <label for="nama" class="col-sm-4 col-form-label">Nama<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <select class="form-control form-control-sm" name="id_kategori" id="id_kategori">
-                                <option disabled selected value="">--Pilih Kategori--</option>
-                                <?php foreach ($kategori->result() as $data) { ?>
-                                    <option value="<?php echo $data->id_kategori ?>"><?php echo $data->nama_kategori ?></option>
-                                <?php } ?>
+                            <input type="text" class="form-control form-control-sm" name="nama" id="nama">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="username_admin" class="col-sm-4 col-form-label">Username<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control form-control-sm" name="username_admin" id="username_admin">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password_admin" class="col-sm-4 col-form-label">Password <font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control form-control-sm" name="password_admin" id="password_admin">
+                            <input type="checkbox" onclick="togglePassword()"> Show Password
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="role" class="col-sm-4 col-form-label">Role<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <select class="form-control form-control-sm" name="role" id="role">
+                                <option selected disabled value="">--Pilih Role--</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Kepala Sekolah">Kepala Sekolah</option>
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="nama_produk" class="col-sm-4 col-form-label">Nama Produk<font color="red">*</font></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" name="nama_produk" id="nama_produk">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="harga_satuan" class="col-sm-4 col-form-label">Harga Satuan<font color="red">*</font></label>
-                        <div class="col-sm-8">
-                            <input type="number" class="form-control form-control-sm" name="harga_satuan" id="harga_satuan">
                         </div>
                     </div>
 
@@ -90,21 +101,37 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal"><span class="fas fa-times mr-1"></span>Cancel</button>
-                    <button type="submit" class="btn btn-xs btn-primary" id="addproduk-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
+                    <button type="submit" class="btn btn-xs btn-primary" id="addadmin-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="editprodukmodal" tabindex="-1" role="dialog" aria-labelledby="editprodukmodal" aria-hidden="true">
+    <div class="modal fade" id="viewpenjualanmodal" tabindex="-1" role="dialog" aria-labelledby="viewpenjualanmodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="viewpenjualanmodallabel"><span class="fas fa-list"></span> View Penjualan</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="viewdatapenjualan"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editadminmodal" tabindex="-1" role="dialog" aria-labelledby="editadminmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="editprodukmodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Produk</h5>
+                    <h5 class="modal-title text-center" id="editadminmodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Admin</h5>
                 </div>
                 <div class="modal-body">
-                    <div id="editdataproduk"></div>
+                    <div id="editdataadmin"></div>
                 </div>
             </div>
         </div>
@@ -127,20 +154,40 @@
 
 <script src="<?php echo base_url('assets/plugins') ?>/toastr/toastr.min.js"></script>
 <script>
+    function togglePassword() {
+        var input = document.getElementById("password_admin");
+
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+
+    function togglePasswordedit() {
+        var input = document.getElementById("password_admin_edit");
+
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+
     $(document).ready(function() {
 
-        let table = new DataTable('#produk');
+        let table = new DataTable('#admin');
 
 
-        $('#addproduk').submit(function(e) {
+        $('#addadmin').submit(function(e) {
             e.preventDefault();
             var form = this;
-            $("#addproduk-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
+            $("#addadmin-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
             var formdata = new FormData(form);
 
             console.log(formdata);
             $.ajax({
-                url: "<?= base_url('index.php/produk/dataproduk?type=addproduk'); ?>",
+                url: "<?= base_url('index.php/admin/dataadmin?type=addadmin'); ?>",
                 type: 'POST',
                 data: formdata,
                 processData: false,
@@ -150,7 +197,7 @@
                     $("#info-data").hide();
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Menambahkan Kategori",
+                        title: "Menambahkan Admin",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -162,31 +209,31 @@
                         $('.text-danger').remove();
                         swal.fire({
                             icon: 'success',
-                            title: 'Penambahan Kategori Berhasil',
-                            text: 'Penambahan Kategori sudah berhasil !',
+                            title: 'Penambahan Admin Berhasil',
+                            text: 'Penambahan Admin sudah berhasil !',
                             showConfirmButton: false,
                             timer: 1500
                         });
                         location.reload();
                         form.reset();
-                        $("#addproduk-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addadmin-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     } else {
                         swal.close()
-                        $("#addproduk-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addadmin-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     }
                 },
                 error: function() {
-                    swal.fire("Penambahan Kategori Gagal", "Ada Kesalahan Saat penambahan Kategori!", "error");
-                    $("#addproduk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                    swal.fire("Penambahan Admin Gagal", "Ada Kesalahan Saat penambahan Admin!", "error");
+                    $("#addadmin-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                 }
             });
 
         });
 
-        $("#produk").on('click', '.delete-produk', function(e) {
+        $("#admin").on('click', '.delete-admin', function(e) {
             e.preventDefault();
-            var id_produk = $(e.currentTarget).attr('data-produk-id');
-            if (id_produk === '') return;
+            var id_admin = $(e.currentTarget).attr('data-admin-id');
+            if (id_admin === '') return;
             Swal.fire({
                 title: 'Hapus Data Ini?',
                 text: "Apakah Anda Akan Mengapus Data Ini?",
@@ -199,14 +246,14 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: '<?= base_url('index.php/produk/dataproduk?type=delproduk'); ?>',
+                        url: '<?= base_url('index.php/admin/dataadmin?type=deladmin'); ?>',
                         data: {
-                            id_produk: id_produk
+                            id_admin: id_admin
                         },
                         beforeSend: function() {
                             swal.fire({
                                 imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                title: "Menghapus Produk",
+                                title: "Menghapus Admin",
                                 text: "Please wait",
                                 showConfirmButton: false,
                                 allowOutsideClick: false
@@ -216,7 +263,7 @@
                             if (data.success == false) {
                                 swal.fire({
                                     icon: 'error',
-                                    title: 'Menghapus Produk Gagal',
+                                    title: 'Menghapus Admin Gagal',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -224,7 +271,7 @@
                             } else {
                                 swal.fire({
                                     icon: 'success',
-                                    title: 'Menghapus Produk Berhasil',
+                                    title: 'Menghapus Admin Berhasil',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -233,27 +280,27 @@
                             }
                         },
                         error: function() {
-                            swal.fire("Penghapusan Produk Gagal", "Ada Kesalahan Saat menghapus Produk!", "error");
+                            swal.fire("Penghapusan Admin Gagal", "Ada Kesalahan Saat menghapus Admin!", "error");
                         }
                     });
                 }
             })
         });
 
-        $("#produk").on('click', '.edit-produk', function(e) {
+        $("#admin").on('click', '.edit-admin', function(e) {
             e.preventDefault();
-            var id_produk = $(e.currentTarget).attr('data-produk-id');
-            if (id_produk === '') return;
+            var id_admin = $(e.currentTarget).attr('data-admin-id');
+            if (id_admin === '') return;
             $.ajax({
                 type: "POST",
-                url: '<?= base_url('index.php/produk/dataproduk?type=editproduk'); ?>',
+                url: '<?= base_url('index.php/admin/dataadmin?type=editadmin'); ?>',
                 data: {
-                    id_produk: id_produk
+                    id_admin: id_admin
                 },
                 beforeSend: function() {
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Mempersiapkan Edit Kategori",
+                        title: "Mempersiapkan Edit Admin",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -261,16 +308,16 @@
                 },
                 success: function(data) {
                     swal.close();
-                    $('#editprodukmodal').modal('show');
-                    $('#editdataproduk').html(data);
+                    $('#editadminmodal').modal('show');
+                    $('#editdataadmin').html(data);
 
-                    $('#editproduk').submit(function(e) {
+                    $('#editadmin').submit(function(e) {
                         e.preventDefault();
                         var form = this;
-                        $("#editproduk-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
+                        $("#editadmin-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
                         var formdata = new FormData(form);
                         $.ajax({
-                            url: "<?= base_url('index.php/produk/editproduk?type=editprodukalt'); ?>",
+                            url: "<?= base_url('index.php/admin/editadmin?type=editadminalt'); ?>",
                             type: 'POST',
                             data: formdata,
                             processData: false,
@@ -279,7 +326,7 @@
                             beforeSend: function() {
                                 swal.fire({
                                     imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                    title: "Menyimpan Data Produk",
+                                    title: "Menyimpan Data Admin",
                                     text: "Please wait",
                                     showConfirmButton: false,
                                     allowOutsideClick: false
@@ -290,30 +337,30 @@
                                     $('.text-danger').remove();
                                     swal.fire({
                                         icon: 'success',
-                                        title: 'Edit Kategori Berhasil',
-                                        text: 'Edit Kategori sudah berhasil !',
+                                        title: 'Edit Admin Berhasil',
+                                        text: 'Edit Admin sudah berhasil !',
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
                                     location.reload();
                                     form.reset();
-                                    $("#editproduk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editadmin-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                 } else {
                                     swal.close()
-                                    $("#editproduk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editadmin-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                     $("#info-edit").html(response.messages);
                                 }
                             },
                             error: function() {
-                                swal.fire("Edit Produk Gagal", "Ada Kesalahan Saat pengeditan Produk!", "error");
-                                $("#editproduk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                swal.fire("Edit Admin Gagal", "Ada Kesalahan Saat pengeditan Admin!", "error");
+                                $("#editadmin-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                             }
                         });
 
                     });
                 },
                 error: function() {
-                    swal.fire("Edit Produk Gagal", "Ada Kesalahan Saat pengeditan Produk!", "error");
+                    swal.fire("Edit Supplier Gagal", "Ada Kesalahan Saat pengeditan Supplier!", "error");
                 }
             });
         });

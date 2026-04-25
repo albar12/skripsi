@@ -11,83 +11,52 @@
 <link rel="stylesheet" href="<?php echo base_url('assets/plugins') ?>/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
 <link rel="stylesheet" href="<?php echo base_url('assets/plugins') ?>/toastr/toastr.min.css">
-
-<script>
-    function tambah_penjualan() {
-        var id_kasir = '<?php echo $this->session->userdata('ID_Kasir') ?>';
-        $.ajax({
-            type: "POST",
-            url: '<?= base_url('index.php/penjualan/cek_shift'); ?>',
-            data: {
-                id_kasir: id_kasir
-            },
-            beforeSend: function() {
-                swal.fire({
-                    imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                    title: "Mempersiapkan Data Penjualan",
-                    text: "Please wait",
-                    showConfirmButton: false,
-                    allowOutsideClick: false
-                });
-            },
-            success: function(data) {
-                swal.close();
-
-                if (data == '0') {
-                    swal.fire("Belum Buka Shift!", "Silahkan Lakukan Buka Shift Terlebih Dahulu!", "error");
-                } else {
-                    window.location.href = '<?php echo base_url('index.php/penjualan/detail_penjualan') ?>';
-                }
-            },
-            error: function() {
-                swal.fire("Data Penjualan Gagal", "Ada Kesalahan Saat Mempersiapkan Data Penjualan!", "error");
-            }
-        });
-    }
-</script>
-
 <div class="content-wrapper">
     <div class="card mb-4">
         <div class="card-header">
-            <h4 style="color: black;" class="my-1">Data Supplier</h4>
+            <h4 style="color: black;" class="my-1">Data Absensi</h4>
             <div class="float-right">
-                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addsuppliermodal" id="supplieradd"><span class="fas fa-user-plus mr-1"></span>Tambah Data Supplier</button>
+                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addabsensimodal" id="kategoriadd"><span class="fas fa-user-plus mr-1"></span>Tambah Data Absensi</button>
             </div>
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped " id="supplier">
+                <table class="table table-bordered table-striped " id="absensi">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Nama Supplier</th>
-                            <th scope="col">Alamat Supplier</th>
-                            <th scope="col">Telephone Supplier</th>
+                            <th scope="col">NIP</th>
+                            <th scope="col">Guru</th>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        foreach ($supplier->result() as $r) { ?>
+                        foreach ($absensi->result() as $r) { ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama_supp ?></td>
+                                <td><?php echo $r->nip ?></td>
+                                <td><?php echo $r->nama ?></td>
+                                <td><?php echo $r->tanggal ?></td>
                                 <?php
-                                $hasil = strlen($r->alamat_supp);
-                                if ($hasil <= 20) {
-                                    $almt = $r->alamat_supp;
-                                } else {
-                                    $alamat_supplier = $r->alamat_supp;
-                                    $almt = substr($alamat_supplier, 0, 20) . '...';
+                                if ($r->status == "Hadir") {
+                                    $color = "success";
+                                } else if ($r->status == "Izin") {
+                                    $color = "primary";
+                                } else if ($r->status == "Sakit") {
+                                    $color = "secondary";
+                                } else if ($r->status == "Alpha") {
+                                    $color = "danger";
                                 }
                                 ?>
-                                <td title="<?php echo $r->alamat_supp ?>"><?php echo $almt ?></td>
-                                <td><?php echo $r->tlp_supp ?></td>
+                                <td><span class="badge badge-<?php echo $color; ?>"><?php echo $r->status ?></span></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-warning edit-supplier" title="Edit Supplier" data-supplier-id="<?php echo $r->id_supp ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-supplier" title="Hapus Supplier" data-supplier-id="<?php echo $r->id_supp ?>"><span class="fas fa-trash"></span></button>
+                                        <button class="btn btn-xs btn-warning edit-absensi" title="Edit Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-absensi" title="Hapus Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-trash"></span></button>
                                     </div>
                                 </td>
                             </tr>
@@ -98,32 +67,44 @@
         </div>
     </div>
 
-    <div class="modal fade" id="addsuppliermodal" tabindex="-1" role="dialog" aria-labelledby="addsuppliermodal" aria-hidden="true">
+    <div class="modal fade" id="addabsensimodal" tabindex="-1" role="dialog" aria-labelledby="addabsensimodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="addsuppliermodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Supplier</h5>
+                    <h5 class="modal-title text-center" id="addabsensimodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Absensi</h5>
                 </div>
                 <div class="modal-body">
-                    <?= form_open_multipart('#', ['id' => 'addsupplier']) ?>
+                    <?= form_open_multipart('#', ['id' => 'addabsensi']) ?>
                     <div class="form-group row">
-                        <label for="nama_supp" class="col-sm-4 col-form-label">Nama Supplier<font color="red">*</font></label>
+                        <label for="guru" class="col-sm-4 col-form-label">Guru<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control form-control-sm" name="nama_supp" id="nama_supp">
+                            <select class="form-control form-control-sm" name="guru" id="guru">
+                                <option selected disabled value="">--Pilih Guru--</option>
+                                <?php foreach ($guru->result() as $item) { ?>
+                                    <option value="<?php echo $item->nip ?>"><?php echo $item->nama ?></option>
+                                <?php  } ?>
+
+                            </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="alamat_supp" class="col-sm-4 col-form-label">Alamat Supplier<font color="red">*</font></label>
+                        <label for="tanggal" class="col-sm-4 col-form-label">Tanggal<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <textarea class="form-control form-control-sm" name="alamat_supp" id="alamat_supp" cols="30" rows="10"></textarea>
+                            <input type="date" class="form-control form-control-sm" name="tanggal" id="tanggal" readonly value="<?php echo date("Y-m-d") ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="tlp_supp" class="col-sm-4 col-form-label">Nomor Telephone<font color="red">*</font></label>
+                        <label for="status" class="col-sm-4 col-form-label">Status<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control form-control-sm" name="tlp_supp" id="tlp_supp">
+                            <select class="form-control form-control-sm" name="status" id="status">
+                                <option selected disabled value="">--Pilih Status--</option>
+                                <option value="Hadir">Hadir</option>
+                                <option value="Izin">Izin</option>
+                                <option value="Sakit">Sakit</option>
+                                <option value="Alpha">Alpha</option>
+                            </select>
                         </div>
                     </div>
 
@@ -131,37 +112,21 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal"><span class="fas fa-times mr-1"></span>Cancel</button>
-                    <button type="submit" class="btn btn-xs btn-primary" id="addsupplier-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
+                    <button type="submit" class="btn btn-xs btn-primary" id="addabsensi-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="viewpenjualanmodal" tabindex="-1" role="dialog" aria-labelledby="viewpenjualanmodal" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-center" id="viewpenjualanmodallabel"><span class="fas fa-list"></span> View Penjualan</h5>
-                </div>
-                <div class="modal-body">
-                    <div id="viewdatapenjualan"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="editsuppliermodal" tabindex="-1" role="dialog" aria-labelledby="editsuppliermodal" aria-hidden="true">
+    <div class="modal fade" id="editabsensimodal" tabindex="-1" role="dialog" aria-labelledby="editabsensimodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="editsuppliermodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Supplier</h5>
+                    <h5 class="modal-title text-center" id="editabsensimodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Absensi</h5>
                 </div>
                 <div class="modal-body">
-                    <div id="editdatasupplier"></div>
+                    <div id="editdataabsensi"></div>
                 </div>
             </div>
         </div>
@@ -186,18 +151,17 @@
 <script>
     $(document).ready(function() {
 
-        let table = new DataTable('#supplier');
+        let table = new DataTable('#absensi');
 
 
-        $('#addsupplier').submit(function(e) {
+        $('#addabsensi').submit(function(e) {
             e.preventDefault();
             var form = this;
-            $("#addsupplier-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
+            $("#addabsensi-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
             var formdata = new FormData(form);
 
-            console.log(formdata);
             $.ajax({
-                url: "<?= base_url('index.php/supplier/datasupplier?type=addsupplier'); ?>",
+                url: "<?= base_url('index.php/absensi/dataabsensi?type=addabsensi'); ?>",
                 type: 'POST',
                 data: formdata,
                 processData: false,
@@ -207,7 +171,7 @@
                     $("#info-data").hide();
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Menambahkan Supplier",
+                        title: "Menambahkan Absensi",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -219,31 +183,31 @@
                         $('.text-danger').remove();
                         swal.fire({
                             icon: 'success',
-                            title: 'Penambahan Supplier Berhasil',
-                            text: 'Penambahan Supplier sudah berhasil !',
+                            title: 'Penambahan Absensi Berhasil',
+                            text: 'Penambahan Absensi sudah berhasil !',
                             showConfirmButton: false,
                             timer: 1500
                         });
                         location.reload();
                         form.reset();
-                        $("#addsupplier-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addabsensi-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     } else {
                         swal.close()
-                        $("#addsupplier-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addabsensi-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     }
                 },
                 error: function() {
-                    swal.fire("Penambahan Supplier Gagal", "Ada Kesalahan Saat penambahan Supplier!", "error");
-                    $("#addsupplier-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                    swal.fire("Penambahan Absensi Gagal", "Ada Kesalahan Saat penambahan Absensi!", "error");
+                    $("#addabsensi-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                 }
             });
 
         });
 
-        $("#supplier").on('click', '.delete-supplier', function(e) {
+        $("#absensi").on('click', '.delete-absensi', function(e) {
             e.preventDefault();
-            var id_supp = $(e.currentTarget).attr('data-supplier-id');
-            if (id_supp === '') return;
+            var id_absensi = $(e.currentTarget).attr('data-absensi-id');
+            if (id_absensi === '') return;
             Swal.fire({
                 title: 'Hapus Data Ini?',
                 text: "Apakah Anda Akan Mengapus Data Ini?",
@@ -256,14 +220,14 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: '<?= base_url('index.php/supplier/datasupplier?type=delsupplier'); ?>',
+                        url: '<?= base_url('index.php/absensi/dataabsensi?type=delabsensi'); ?>',
                         data: {
-                            id_supp: id_supp
+                            id_absensi: id_absensi
                         },
                         beforeSend: function() {
                             swal.fire({
                                 imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                title: "Menghapus Supplier",
+                                title: "Menghapus Absensi",
                                 text: "Please wait",
                                 showConfirmButton: false,
                                 allowOutsideClick: false
@@ -273,7 +237,7 @@
                             if (data.success == false) {
                                 swal.fire({
                                     icon: 'error',
-                                    title: 'Menghapus Supplier Gagal',
+                                    title: 'Menghapus Absensi Gagal',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -281,7 +245,7 @@
                             } else {
                                 swal.fire({
                                     icon: 'success',
-                                    title: 'Menghapus Supplier Berhasil',
+                                    title: 'Menghapus Absensi Berhasil',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -290,27 +254,27 @@
                             }
                         },
                         error: function() {
-                            swal.fire("Penghapusan Supplier Gagal", "Ada Kesalahan Saat menghapus Supplier!", "error");
+                            swal.fire("Penghapusan Absensi Gagal", "Ada Kesalahan Saat menghapus Absensi!", "error");
                         }
                     });
                 }
             })
         });
 
-        $("#supplier").on('click', '.edit-supplier', function(e) {
+        $("#absensi").on('click', '.edit-absensi', function(e) {
             e.preventDefault();
-            var id_supp = $(e.currentTarget).attr('data-supplier-id');
-            if (id_supp === '') return;
+            var id_absensi = $(e.currentTarget).attr('data-absensi-id');
+            if (id_absensi === '') return;
             $.ajax({
                 type: "POST",
-                url: '<?= base_url('index.php/supplier/datasupplier?type=editsupplier'); ?>',
+                url: '<?= base_url('index.php/absensi/dataabsensi?type=editabsensi'); ?>',
                 data: {
-                    id_supp: id_supp
+                    id_absensi: id_absensi
                 },
                 beforeSend: function() {
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Mempersiapkan Edit Barang",
+                        title: "Mempersiapkan Edit Absensi",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -318,16 +282,16 @@
                 },
                 success: function(data) {
                     swal.close();
-                    $('#editsuppliermodal').modal('show');
-                    $('#editdatasupplier').html(data);
+                    $('#editabsensimodal').modal('show');
+                    $('#editdataabsensi').html(data);
 
-                    $('#editsupplier').submit(function(e) {
+                    $('#editabsensi').submit(function(e) {
                         e.preventDefault();
                         var form = this;
-                        $("#editsupplier-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
+                        $("#editabsensi-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
                         var formdata = new FormData(form);
                         $.ajax({
-                            url: "<?= base_url('index.php/supplier/editsupplier?type=editsupplieralt'); ?>",
+                            url: "<?= base_url('index.php/absensi/editabsensi?type=editabsensialt'); ?>",
                             type: 'POST',
                             data: formdata,
                             processData: false,
@@ -336,7 +300,7 @@
                             beforeSend: function() {
                                 swal.fire({
                                     imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                    title: "Menyimpan Data Supplier",
+                                    title: "Menyimpan Data Absensi",
                                     text: "Please wait",
                                     showConfirmButton: false,
                                     allowOutsideClick: false
@@ -347,30 +311,30 @@
                                     $('.text-danger').remove();
                                     swal.fire({
                                         icon: 'success',
-                                        title: 'Edit Supplier Berhasil',
-                                        text: 'Edit Supplier sudah berhasil !',
+                                        title: 'Edit Absensi Berhasil',
+                                        text: 'Edit Absensi sudah berhasil !',
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
                                     location.reload();
                                     form.reset();
-                                    $("#editsupplier-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editabsensi-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                 } else {
                                     swal.close()
-                                    $("#editsupplier-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editabsensi-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                     $("#info-edit").html(response.messages);
                                 }
                             },
                             error: function() {
-                                swal.fire("Edit Supplier Gagal", "Ada Kesalahan Saat pengeditan Supplier!", "error");
-                                $("#editsupplier-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                swal.fire("Edit Absensi Gagal", "Ada Kesalahan Saat pengeditan Absensi!", "error");
+                                $("#editabsensi-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                             }
                         });
 
                     });
                 },
                 error: function() {
-                    swal.fire("Edit Supplier Gagal", "Ada Kesalahan Saat pengeditan Supplier!", "error");
+                    swal.fire("Edit Absensi Gagal", "Ada Kesalahan Saat pengeditan Absensi!", "error");
                 }
             });
         });

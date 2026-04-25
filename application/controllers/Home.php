@@ -18,11 +18,21 @@ class Home extends CI_Controller
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/userguide3/general/urls.html
 	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->helper("auth");
+	}
+
+
 	public function index()
 	{
+
+		// phpinfo();
 		$data = [
 			'title' => 'Home'
 		];
+
 		$this->load->view('layout/helper_login', $data);
 		$this->load->view('layout/header', $data);
 		$this->load->view('layout/navbar', $data);
