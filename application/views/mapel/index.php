@@ -14,43 +14,35 @@
 <div class="content-wrapper">
     <div class="card mb-4">
         <div class="card-header">
-            <h4 style="color: black;" class="my-1">Data Stok Opname</h4>
+            <h4 style="color: black;" class="my-1">Data Mata Pelajaran</h4>
             <div class="float-right">
-                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addstokopnamemodal" id="stokopnameadd"><span class="fas fa-user-plus mr-1"></span>Tambah Data Stok Opname</button>
+                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addmapelmodal" id="mapeladd"><span class="fas fa-user-plus mr-1"></span>Tambah Dara Mata Pelajaran</button>
             </div>
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped " id="stok_opname">
+                <table class="table table-bordered table-striped " id="mapel">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Kategori</th>
-                            <th scope="col">Produk</th>
-                            <th scope="col">Jumlah</th>
-                            <th scope="col">Status Produk</th>
-                            <th scope="col">Tanggal Stok Opname</th>
+                            <th scope="col">Mata Pelajaran</th>
+                            <th scope="col">Admin Input</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        foreach ($stok_opname->result() as $r) {
-                            $create_date = date('Y-m-d', strtotime($r->create_date));
-                            $tgl_so = $this->M_Stokopname->tgl_indo($create_date);
+                        foreach ($mapel->result() as $r) {
                         ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama_kategori ?></td>
-                                <td><?php echo $r->nama_produk ?></td>
-                                <td><?php echo $r->jumlah ?></td>
-                                <td><?php echo $r->status_produk ?></td>
-                                <td><?php echo $tgl_so ?></td>
+                                <td><?php echo $r->nama_mapel ?></td>
+                                <td><?php echo $r->nama_admin ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-warning edit-stokopname" title="Edit Data Stok Opname" data-stokopname-id="<?php echo $r->id_barang_keluar ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-stokopname" title="Hapus Data Stok Opname" data-stokopname-id="<?php echo $r->id_barang_keluar ?>"><span class="fas fa-trash"></span></button>
+                                        <button class="btn btn-xs btn-warning edit-mapel" title="Edit Mapel" data-mapel-id="<?php echo $r->id_mapel ?>"><span class="fas fa-user-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-mapel" title="Hapus Mapel" data-mapel-id="<?php echo $r->id_mapel ?>"><span class="fas fa-trash"></span></button>
                                     </div>
                                 </td>
                             </tr>
@@ -63,51 +55,19 @@
         </div>
     </div>
 
-    <div class="modal fade" id="addstokopnamemodal" tabindex="-1" role="dialog" aria-labelledby="addstokopnamemodal" aria-hidden="true">
+    <div class="modal fade" id="addmapelmodal" tabindex="-1" role="dialog" aria-labelledby="addmapelmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="addstokopnamemodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Stok Opname</h5>
+                    <h5 class="modal-title text-center" id="addmapelmodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Mata Pelajaran</h5>
                 </div>
                 <div class="modal-body">
-                    <?= form_open_multipart('#', ['id' => 'addstokopname']) ?>
+                    <?= form_open_multipart('#', ['id' => 'addmapel']) ?>
 
                     <div class="form-group row">
-                        <label for="id_kategori" class="col-sm-4 col-form-label">Kategori<font color="red">*</font></label>
+                        <label for="mapel" class="col-sm-4 col-form-label">Nama Mata Pelajaran<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <select onchange="kategori_change()" class="form-control form-control-sm" name="id_kategori" id="id_kategori">
-                                <option disabled selected value="">--Pilih Kategori--</option>
-                                <?php foreach ($kategori->result() as $data) { ?>
-                                    <option value="<?php echo $data->id_kategori ?>"><?php echo $data->nama_kategori ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="id_produk" class="col-sm-4 col-form-label">Produk<font color="red">*</font></label>
-                        <div class="col-sm-8">
-                            <select class="form-control form-control-sm" name="id_produk" id="id_produk">
-                                <option disabled selected value="">--Pilih Produk--</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="jumlah" class="col-sm-4 col-form-label">Jumlah<font color="red">*</font></label>
-                        <div class="col-sm-8">
-                            <input type="number" class="form-control form-control-sm" name="jumlah" id="jumlah">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="status_produk" class="col-sm-4 col-form-label">Status Produk<font color="red">*</font></label>
-                        <div class="col-sm-8">
-                            <select class="form-control form-control-sm" name="status_produk" id="status_produk">
-                                <option disabled selected value="">--Pilih Status--</option>
-                                <option value="Produk Kadaluarsa">Produk Kadaluarsa</option>
-                                <option value="Produk Rusak">Produk Rusak</option>
-                            </select>
+                            <input type="text" class="form-control form-control-sm" name="mapel" id="mapel">
                         </div>
                     </div>
 
@@ -115,21 +75,21 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal"><span class="fas fa-times mr-1"></span>Cancel</button>
-                    <button type="submit" class="btn btn-xs btn-primary" id="addstokopname-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
+                    <button type="submit" class="btn btn-xs btn-primary" id="addmapel-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="editstokopnamemodal" tabindex="-1" role="dialog" aria-labelledby="editstokopnamemodal" aria-hidden="true">
+    <div class="modal fade" id="editmapelmodal" tabindex="-1" role="dialog" aria-labelledby="editmapelmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="editstokopnamemodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Stok Opname</h5>
+                    <h5 class="modal-title text-center" id="editmapelmodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Mata Pelajaran</h5>
                 </div>
                 <div class="modal-body">
-                    <div id="editdatastokopname"></div>
+                    <div id="editdatamapel"></div>
                 </div>
             </div>
         </div>
@@ -154,18 +114,18 @@
 <script>
     $(document).ready(function() {
 
-        let table = new DataTable('#stok_opname');
+        let table = new DataTable('#mapel');
 
 
-        $('#addstokopname').submit(function(e) {
+        $('#addmapel').submit(function(e) {
             e.preventDefault();
             var form = this;
-            $("#addstokopname-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
+            $("#addmapel-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
             var formdata = new FormData(form);
 
             console.log(formdata);
             $.ajax({
-                url: "<?= base_url('stokopname/datastokopname?type=addstokopname'); ?>",
+                url: "<?= base_url('index.php/mapel/datamapel?type=addmapel'); ?>",
                 type: 'POST',
                 data: formdata,
                 processData: false,
@@ -175,7 +135,7 @@
                     $("#info-data").hide();
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Menambahkan Stok Opname",
+                        title: "Menambahkan Mata Pelajaran",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -187,31 +147,31 @@
                         $('.text-danger').remove();
                         swal.fire({
                             icon: 'success',
-                            title: 'Penambahan Stok Opname Berhasil',
-                            text: 'Penambahan Stok Opname sudah berhasil !',
+                            title: 'Penambahan Mata Pelajaran Berhasil',
+                            text: 'Penambahan Mata Pelajaran sudah berhasil !',
                             showConfirmButton: false,
                             timer: 1500
                         });
                         location.reload();
                         form.reset();
-                        $("#addstokopname-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addmapel-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     } else {
                         swal.close()
-                        $("#addstokopname-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addmapel-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     }
                 },
                 error: function() {
-                    swal.fire("Penambahan Stok Opname Gagal", "Ada Kesalahan Saat penambahan Stok Opname!", "error");
-                    $("#addstokopname-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                    swal.fire("Penambahan Mata Pelajaran Gagal", "Ada Kesalahan Saat penambahan Mata Pelajaran!", "error");
+                    $("#addmapel-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                 }
             });
 
         });
 
-        $("#stok_opname").on('click', '.delete-stokopname', function(e) {
+        $("#mapel").on('click', '.delete-mapel', function(e) {
             e.preventDefault();
-            var id_stokopname = $(e.currentTarget).attr('data-stokopname-id');
-            if (id_stokopname === '') return;
+            var id_mapel = $(e.currentTarget).attr('data-mapel-id');
+            if (id_mapel === '') return;
             Swal.fire({
                 title: 'Hapus Data Ini?',
                 text: "Apakah Anda Akan Mengapus Data Ini?",
@@ -224,14 +184,14 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: '<?= base_url('stokopname/datastokopname?type=delstokopname'); ?>',
+                        url: '<?= base_url('index.php/mapel/datamapel?type=delmapel'); ?>',
                         data: {
-                            id_stokopname: id_stokopname
+                            id_mapel: id_mapel
                         },
                         beforeSend: function() {
                             swal.fire({
                                 imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                title: "Menghapus Produk",
+                                title: "Menghapus Mata Pelajaran",
                                 text: "Please wait",
                                 showConfirmButton: false,
                                 allowOutsideClick: false
@@ -241,7 +201,7 @@
                             if (data.success == false) {
                                 swal.fire({
                                     icon: 'error',
-                                    title: 'Menghapus Produk Gagal',
+                                    title: 'Menghapus Mata Pelajaran Gagal',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -249,7 +209,7 @@
                             } else {
                                 swal.fire({
                                     icon: 'success',
-                                    title: 'Menghapus Produk Berhasil',
+                                    title: 'Menghapus Mata Pelajaran Berhasil',
                                     text: data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -258,27 +218,27 @@
                             }
                         },
                         error: function() {
-                            swal.fire("Penghapusan Produk Gagal", "Ada Kesalahan Saat menghapus Produk!", "error");
+                            swal.fire("Penghapusan Mata Pelajaran Gagal", "Ada Kesalahan Saat menghapus Mata Pelajaran!", "error");
                         }
                     });
                 }
             })
         });
 
-        $("#stok_opname").on('click', '.edit-stokopname', function(e) {
+        $("#mapel").on('click', '.edit-mapel', function(e) {
             e.preventDefault();
-            var id_stokopname = $(e.currentTarget).attr('data-stokopname-id');
-            if (id_stokopname === '') return;
+            var id_mapel = $(e.currentTarget).attr('data-mapel-id');
+            if (id_mapel === '') return;
             $.ajax({
                 type: "POST",
-                url: '<?= base_url('stokopname/datastokopname?type=editstokopname'); ?>',
+                url: '<?= base_url('index.php/mapel/datamapel?type=editmapel'); ?>',
                 data: {
-                    id_stokopname: id_stokopname
+                    id_mapel: id_mapel
                 },
                 beforeSend: function() {
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Mempersiapkan Edit Stok Opname",
+                        title: "Mempersiapkan Edit Mata Pelajaran",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -286,16 +246,16 @@
                 },
                 success: function(data) {
                     swal.close();
-                    $('#editstokopnamemodal').modal('show');
-                    $('#editdatastokopname').html(data);
+                    $('#editmapelmodal').modal('show');
+                    $('#editdatamapel').html(data);
 
-                    $('#editstokopname').submit(function(e) {
+                    $('#editmapel').submit(function(e) {
                         e.preventDefault();
                         var form = this;
-                        $("#editstokopname-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
+                        $("#editmapel-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
                         var formdata = new FormData(form);
                         $.ajax({
-                            url: "<?= base_url('stokopname/editstokopname?type=editstokopnamealt'); ?>",
+                            url: "<?= base_url('index.php/mapel/editmapel?type=editmapelalt'); ?>",
                             type: 'POST',
                             data: formdata,
                             processData: false,
@@ -304,7 +264,7 @@
                             beforeSend: function() {
                                 swal.fire({
                                     imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                    title: "Menyimpan Data Stok Opname",
+                                    title: "Menyimpan Data Mata Pelajaran",
                                     text: "Please wait",
                                     showConfirmButton: false,
                                     allowOutsideClick: false
@@ -315,30 +275,30 @@
                                     $('.text-danger').remove();
                                     swal.fire({
                                         icon: 'success',
-                                        title: 'Edit Stok Opname Berhasil',
-                                        text: 'Edit Stok Opname sudah berhasil !',
+                                        title: 'Edit Mata Pelajaran Berhasil',
+                                        text: 'Edit Mata Pelajaran sudah berhasil !',
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
                                     location.reload();
                                     form.reset();
-                                    $("#editstokopname-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editmapel-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                 } else {
                                     swal.close()
-                                    $("#editstokopname-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editmapel-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                     $("#info-edit").html(response.messages);
                                 }
                             },
                             error: function() {
-                                swal.fire("Edit Stok Opname Gagal", "Ada Kesalahan Saat pengeditan Stok Opname!", "error");
-                                $("#editstokopname-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                swal.fire("Edit Mata Pelajaran Gagal", "Ada Kesalahan Saat pengeditan Mata Pelajaran!", "error");
+                                $("#editmapel-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                             }
                         });
 
                     });
                 },
                 error: function() {
-                    swal.fire("Edit Stok Opname Gagal", "Ada Kesalahan Saat pengeditan Stok Opname!", "error");
+                    swal.fire("Edit Barang Masuk Gagal", "Ada Kesalahan Saat pengeditan Barang Masuk!", "error");
                 }
             });
         });
@@ -348,7 +308,7 @@
         var id_kategori = $('#id_kategori').val();
         $.ajax({
             type: "POST",
-            url: '<?= base_url('stokopname/get_produk'); ?>',
+            url: '<?= base_url('index.php/barangmasuk/get_produk'); ?>',
             data: {
                 id_kategori: id_kategori
             },

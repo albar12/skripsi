@@ -14,40 +14,39 @@
 <div class="content-wrapper">
     <div class="card mb-4">
         <div class="card-header">
-            <h4 style="color: black;" class="my-1">Data Barang Keluar</h4>
+            <h4 style="color: black;" class="my-1">Data Jadwal</h4>
             <div class="float-right">
-                <!-- <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addbarangmasukmodal" id="barangmasukadd"><span class="fas fa-user-plus mr-1"></span>Tambah Dara Barang Masuk</button> -->
-                <a class="btn btn-xs btn-success" style="color: white;" href="<?php echo base_url('index.php/barangkeluar/tambah_barang_keluar') ?>"><span class="fas fa-user-plus mr-1"></span>Tambah Dara Barang Keluar</a>
+                <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#addjadwalmodal" id="jadwaladd"><span class="fas fa-user-plus mr-1"></span>Tambah Dara Jadwal</button>
             </div>
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped " id="barang_keluar">
+                <table class="table table-bordered table-striped " id="jadwal">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Pelanggan</th>
-                            <th scope="col">Tanggal Penjualan</th>
-                            <th scope="col">Team Produk</th>
+                            <th scope="col">Hari</th>
+                            <th scope="col">Jam Mulai</th>
+                            <th scope="col">Jam Selesai</th>
+                            <th scope="col">Admin Input</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $no = 1;
-                        foreach ($barang_keluar->result() as $r) {
-                            $tgl_penjualan = $this->M_Barangkeluar->tgl_indo($r->tanggal_penjualan);
+                        foreach ($jadwal->result() as $r) {
                         ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama_pelanggan ?></td>
-                                <td><?php echo $tgl_penjualan ?></td>
-                                <td><?php echo $r->nama ?></td>
+                                <td><?php echo $r->hari ?></td>
+                                <td><?php echo $r->jam_mulai ?></td>
+                                <td><?php echo $r->jam_selesai ?></td>
+                                <td><?php echo $r->nama_admin ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
-                                        <!-- <button class="btn btn-xs btn-warning edit-penjualan" title="Edit Penjualan" data-penjualan-id="<?php echo $r->id_penjualan ?>"><span class="fas fa-edit"></span></button> -->
-                                        <a class="btn btn-xs btn-warning" href="<?php echo base_url('index.php/barangkeluar/edit_barang_keluar/') . $r->id_penjualan ?>"><span class="fas fa-edit"></span></a>
-                                        <button class="btn btn-xs btn-danger delete-penjualan" title="Hapus Penjualan" data-penjualan-id="<?php echo $r->id_penjualan ?>"><span class="fas fa-trash"></span></button>
+                                        <button class="btn btn-xs btn-warning edit-jadwal" title="Edit Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-jadwal" title="Hapus Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-trash"></span></button>
                                     </div>
                                 </td>
                             </tr>
@@ -58,15 +57,63 @@
         </div>
     </div>
 
-
-    <div class="modal fade" id="editbarangmasukmodal" tabindex="-1" role="dialog" aria-labelledby="editbarangmasukmodal" aria-hidden="true">
+    <div class="modal fade" id="addjadwalmodal" tabindex="-1" role="dialog" aria-labelledby="addjadwalmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="editbarangmasukmodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Barang Masuk</h5>
+                    <h5 class="modal-title text-center" id="addjadwalmodallabel"><span class="fas fa-user-plus mr-1"></span>Tambah Data Jadwal</h5>
                 </div>
                 <div class="modal-body">
-                    <div id="editdatabarangmasuk"></div>
+                    <?= form_open_multipart('#', ['id' => 'addjadwal']) ?>
+
+                    <div class="form-group row">
+                        <label for="hari" class="col-sm-4 col-form-label">Hari<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <select class="form-control form-control-sm" name="hari" id="hari">
+                                <option selected disabled value="">--Pilih Hari--</option>
+                                <option value="Senin">Senin</option>
+                                <option value="Selasa">Selasa</option>
+                                <option value="Rabu">Rabu</option>
+                                <option value="Kamis">Kamis</option>
+                                <option value="Jumat">Jumat</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="jam_mulai" class="col-sm-4 col-form-label">Jam Mulai<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="time" class="form-control form-control-sm" name="jam_mulai" id="jam_mulai">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="jam_selesai" class="col-sm-4 col-form-label">Jam Selesai<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="time" class="form-control form-control-sm" name="jam_selesai" id="jam_selesai">
+                        </div>
+                    </div>
+
+                    <div class="my-2" id="info-data"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-xs btn-danger" data-dismiss="modal"><span class="fas fa-times mr-1"></span>Cancel</button>
+                    <button type="submit" class="btn btn-xs btn-primary" id="addjadwal-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editjadwalmodal" tabindex="-1" role="dialog" aria-labelledby="editjadwalmodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="editjadwalmodallabel"><span class="fas fa-user-edit mr-1"></span>Edit Data Jadwal</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="editdatajadwal"></div>
                 </div>
             </div>
         </div>
@@ -91,18 +138,18 @@
 <script>
     $(document).ready(function() {
 
-        let table = new DataTable('#barang_keluar');
+        let table = new DataTable('#jadwal');
 
 
-        $('#addbarangmasuk').submit(function(e) {
+        $('#addjadwal').submit(function(e) {
             e.preventDefault();
             var form = this;
-            $("#addbarangmasuk-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
+            $("#addjadwal-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
             var formdata = new FormData(form);
 
             console.log(formdata);
             $.ajax({
-                url: "<?= base_url('index.php/barangmasuk/databarangmasuk?type=addbarangmasuk'); ?>",
+                url: "<?= base_url('index.php/jadwal/datajadwal?type=addjadwal'); ?>",
                 type: 'POST',
                 data: formdata,
                 processData: false,
@@ -112,7 +159,7 @@
                     $("#info-data").hide();
                     swal.fire({
                         imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                        title: "Menambahkan Barang Masuk",
+                        title: "Menambahkan Jadwal",
                         text: "Please wait",
                         showConfirmButton: false,
                         allowOutsideClick: false
@@ -124,31 +171,31 @@
                         $('.text-danger').remove();
                         swal.fire({
                             icon: 'success',
-                            title: 'Penambahan Barang Masuk Berhasil',
-                            text: 'Penambahan Barang Masuk sudah berhasil !',
+                            title: 'Penambahan Jadwal Berhasil',
+                            text: 'Penambahan Jadwal sudah berhasil !',
                             showConfirmButton: false,
                             timer: 1500
                         });
                         location.reload();
                         form.reset();
-                        $("#addbarangmasuk-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addjadwal-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     } else {
                         swal.close()
-                        $("#addbarangmasuk-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
+                        $("#addjadwal-btn").html("<span class='fas fa-plus mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                     }
                 },
                 error: function() {
-                    swal.fire("Penambahan Barang Masuk Gagal", "Ada Kesalahan Saat penambahan Barang Masuk!", "error");
-                    $("#addbarangmasuk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                    swal.fire("Penambahan Jadwal Gagal", "Ada Kesalahan Saat penambahan Jadwal!", "error");
+                    $("#addjadwal-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                 }
             });
 
         });
 
-        $("#barang_keluar").on('click', '.delete-penjualan', function(e) {
+        $("#jadwal").on('click', '.delete-jadwal', function(e) {
             e.preventDefault();
-            var id_penjualan = $(e.currentTarget).attr('data-penjualan-id');
-            if (id_penjualan === '') return;
+            var id_jadwal = $(e.currentTarget).attr('data-jadwal-id');
+            if (id_jadwal === '') return;
             Swal.fire({
                 title: 'Hapus Data Ini?',
                 text: "Apakah Anda Akan Mengapus Data Ini?",
@@ -161,9 +208,9 @@
                 if (result.value) {
                     $.ajax({
                         type: "POST",
-                        url: '<?= base_url('index.php/barangkeluar/delete'); ?>',
+                        url: '<?= base_url('index.php/jadwal/datajadwal?type=deljadwal'); ?>',
                         data: {
-                            id_penjualan: id_penjualan
+                            id_jadwal: id_jadwal
                         },
                         beforeSend: function() {
                             swal.fire({
@@ -204,15 +251,15 @@
             })
         });
 
-        $("#barang_masuk").on('click', '.edit-barang-masuk', function(e) {
+        $("#jadwal").on('click', '.edit-jadwal', function(e) {
             e.preventDefault();
-            var id_barang_masuk = $(e.currentTarget).attr('data-barang-masuk-id');
-            if (id_barang_masuk === '') return;
+            var id_jadwal = $(e.currentTarget).attr('data-jadwal-id');
+            if (id_jadwal === '') return;
             $.ajax({
                 type: "POST",
-                url: '<?= base_url('index.php/barangmasuk/databarangmasuk?type=editbarangmasuk'); ?>',
+                url: '<?= base_url('index.php/jadwal/datajadwal?type=editjadwal'); ?>',
                 data: {
-                    id_barang_masuk: id_barang_masuk
+                    id_jadwal: id_jadwal
                 },
                 beforeSend: function() {
                     swal.fire({
@@ -225,16 +272,16 @@
                 },
                 success: function(data) {
                     swal.close();
-                    $('#editbarangmasukmodal').modal('show');
-                    $('#editdatabarangmasuk').html(data);
+                    $('#editjadwalmodal').modal('show');
+                    $('#editdatajadwal').html(data);
 
-                    $('#editbarangmasuk').submit(function(e) {
+                    $('#editjadwal').submit(function(e) {
                         e.preventDefault();
                         var form = this;
-                        $("#editbarangmasuk-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
+                        $("#editjadwal-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
                         var formdata = new FormData(form);
                         $.ajax({
-                            url: "<?= base_url('index.php/barangmasuk/editbarangmasuk?type=editbarangmasukalt'); ?>",
+                            url: "<?= base_url('index.php/jadwal/editjadwal?type=editjadwalalt'); ?>",
                             type: 'POST',
                             data: formdata,
                             processData: false,
@@ -243,7 +290,7 @@
                             beforeSend: function() {
                                 swal.fire({
                                     imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
-                                    title: "Menyimpan Data Barang Masuk",
+                                    title: "Menyimpan Data Jadwal",
                                     text: "Please wait",
                                     showConfirmButton: false,
                                     allowOutsideClick: false
@@ -254,30 +301,30 @@
                                     $('.text-danger').remove();
                                     swal.fire({
                                         icon: 'success',
-                                        title: 'Edit Barang Masuk Berhasil',
-                                        text: 'Edit Barang Masuk sudah berhasil !',
+                                        title: 'Edit Jadwal Berhasil',
+                                        text: 'Edit Jadwal sudah berhasil !',
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
                                     location.reload();
                                     form.reset();
-                                    $("#editbarangmasuk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editjadwal-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                 } else {
                                     swal.close()
-                                    $("#editbarangmasuk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#editjadwal-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                                     $("#info-edit").html(response.messages);
                                 }
                             },
                             error: function() {
-                                swal.fire("Edit Barang Masuk Gagal", "Ada Kesalahan Saat pengeditan Barang Masuk!", "error");
-                                $("#editbarangmasuk-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                swal.fire("Edit Jadwal Gagal", "Ada Kesalahan Saat pengeditan Jadwal!", "error");
+                                $("#editjadwal-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
                             }
                         });
 
                     });
                 },
                 error: function() {
-                    swal.fire("Edit Barang Masuk Gagal", "Ada Kesalahan Saat pengeditan Barang Masuk!", "error");
+                    swal.fire("Edit Jadwal Gagal", "Ada Kesalahan Saat pengeditan Jadwal!", "error");
                 }
             });
         });

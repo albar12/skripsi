@@ -34,7 +34,7 @@ class M_Dashboard extends CI_Model
         return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
 
-    public function count_barang_masuk()
+    public function count_guru()
     {
         if ($this->input->post("dash_tanggal_dari") && $this->input->post("dash_tanggal_sampai")) {
             $dash_tanggal_dari = $this->input->post("dash_tanggal_dari");

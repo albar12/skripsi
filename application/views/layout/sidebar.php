@@ -69,52 +69,21 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/barangmasuk/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'barangmasuk') {
-                                                                                                            echo 'active';
-                                                                                                        } ?>">
+                        <a href="<?php echo base_url('index.php/mapel/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'mapel') {
+                                                                                                        echo 'active';
+                                                                                                    } ?>">
                             <i class="nav-icon fas fa-edit"></i>
-                            Barang Masuk
+                            Mata Pelajaran
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/barangkeluar/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'barangkeluar') {
-                                                                                                                echo 'active';
-                                                                                                            } ?>">
+                        <a href="<?php echo base_url('index.php/jadwal/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'jadwal') {
+                                                                                                        echo 'active';
+                                                                                                    } ?>">
                             <i class="nav-icon fas fa-edit"></i>
-                            Barang Keluar
+                            Jadwal
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('stokopname/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'stokopname') {
-                                                                                                    echo 'active';
-                                                                                                } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Stok Opname
-                        </a>
-                    </li>
-                    <!-- <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
-                        <p>
-                            Shift
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="<?php echo base_url('index.php/shift/buka_shift') ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Buka Shift</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?php echo base_url('index.php/shift/tutup_shift') ?>" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Tutup Shift</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li> -->
                 <?php elseif ($this->session->userdata('posisi') == '2') : ?>
                     <li class="nav-item">
                         <a href="<?php echo base_url('index.php/dashboard/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'dashboard') {
