@@ -1,6 +1,43 @@
 <script src="<?php echo base_url('assets/plugins') ?>/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url('assets/plugins') ?>/jquery/jquery.js"></script>
 <script src="<?php echo base_url('assets/plugins') ?>/jquery-ui/jquery-ui.min.js"></script>
+
+<style>
+    /* Full layar + background */
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        /* tengah horizontal */
+        align-items: center;
+        /* tengah vertikal */
+        height: 100vh;
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+    }
+
+    /* Box login */
+    .login-box {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    /* Card biar lebih clean */
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card {
+        backdrop-filter: blur(10px);
+    }
+
+    /* Responsive kecil */
+    @media (max-width: 480px) {
+        .login-box {
+            padding: 10px;
+        }
+    }
+</style>
 <script>
     $(document).ready(function() {
 
@@ -37,7 +74,7 @@
     });
 </script>
 
-<center>
+<div class="login-wrapper">
     <div class="login-box">
         <div class="login-logo">
             <h2>FORM LOGIN</h2>
@@ -47,6 +84,7 @@
             <div class="card-body login-card-body">
                 <?= form_open_multipart('#', ['id' => 'login']) ?>
                 <div id="info-data"></div>
+
                 <div class="input-group mb-3">
                     <input type="text" name="username" id="username" class="form-control" placeholder="Username/NIP">
                     <div class="input-group-append">
@@ -55,6 +93,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="input-group mb-3">
                     <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                     <div class="input-group-append">
@@ -63,14 +102,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="float-right">
-                    <button type="submit" class="btn btn-primary btn-block">Login</button>
-                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
 
                 </form>
-
             </div>
-
         </div>
     </div>
-</center>
+</div>
