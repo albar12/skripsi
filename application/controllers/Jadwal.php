@@ -76,6 +76,14 @@ class Jadwal extends CI_Controller
                     'success' => true
                 ];
             }
+        } elseif ($typesend == 'showjadwal') {
+            $data['jadwal'] =  $this->M_Jadwal->getbyid($this->input->post('id_jadwal'));
+            $html = $this->load->view('jadwal/show_jadwal', $data);
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
         } elseif ($typesend == 'deljadwal') {
 
             $this->M_Jadwal->crudjadwal($typesend);

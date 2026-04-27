@@ -55,6 +55,7 @@
                                 <td><span class="badge badge-<?php echo $color; ?>"><?php echo $r->status ?></span></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
+                                        <button class="btn btn-xs btn-primary show-absensi" title="Detail Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-eye"></span></button>
                                         <button class="btn btn-xs btn-warning edit-absensi" title="Edit Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-edit"></span></button>
                                         <button class="btn btn-xs btn-danger delete-absensi" title="Hapus Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-trash"></span></button>
                                     </div>
@@ -115,6 +116,19 @@
                     <button type="submit" class="btn btn-xs btn-primary" id="addabsensi-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="showabsensimodal" tabindex="-1" role="dialog" aria-labelledby="showabsensimodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="showabsensimodallabel"><span class="fas fa-user-edit mr-1"></span>Detail Data Absensi</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="showdataabsensi"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -259,6 +273,36 @@
                     });
                 }
             })
+        });
+
+        $("#absensi").on('click', '.show-absensi', function(e) {
+            e.preventDefault();
+            var id_absensi = $(e.currentTarget).attr('data-absensi-id');
+            if (id_absensi === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/absensi/dataabsensi?type=showabsensi'); ?>',
+                data: {
+                    id_absensi: id_absensi
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan Detail Absensi",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#showabsensimodal').modal('show');
+                    $('#showdataabsensi').html(data);
+                },
+                error: function() {
+                    swal.fire("Detail Absensi Gagal", "Ada Kesalahan Saat detail Absensi!", "error");
+                }
+            });
         });
 
         $("#absensi").on('click', '.edit-absensi', function(e) {

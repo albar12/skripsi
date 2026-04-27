@@ -82,6 +82,14 @@ class KepalaSekolah extends CI_Controller
                     'success' => true
                 ];
             }
+        } elseif ($typesend == 'showkepsek') {
+            $data['kepsek'] =  $this->M_KepalaSekolah->getbyid($this->input->post('nip'));
+            $html = $this->load->view('kepala_sekolah/show_kepala_sekolah', $data);
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
         } elseif ($typesend == 'delkepsek') {
 
             $this->M_KepalaSekolah->crudkepsek($typesend);

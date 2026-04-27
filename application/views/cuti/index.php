@@ -29,6 +29,7 @@
                             <th scope="col">Tanggal</th>
                             <th scope="col">Waktu</th>
                             <th scope="col">Alasan</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -36,16 +37,31 @@
                         <?php
                         $no = 1;
                         foreach ($cuti->result() as $r) { ?>
+                            <?php
+                            if ($r->status == '') {
+                                $status = '<span class="badge badge-primary">Pengajuan</span>';
+                            } else if ($r->status == 'Approve') {
+                                $status = '<span class="badge badge-success">' . $r->status . '</span>';
+                            } else {
+                                $status = '<span class="badge badge-danger">' . $r->status . '</span>';
+                            }
+                            ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
                                 <td><?php echo $r->nama ?></td>
                                 <td><?php echo $r->tanggal ?></td>
                                 <td><?php echo $r->waktu . " Hari" ?></td>
                                 <td><?php echo $r->alasan ?></td>
+                                <td><?php echo $status ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-warning edit-cuti" title="Edit Produk" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-cuti" title="Hapus Produk" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-trash"></span></button>
+                                        <button class="btn btn-xs btn-primary show-cuti" title="Show Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-eye"></span></button>
+                                        <?php if (!$r->status) { ?>
+                                            <button class="btn btn-xs btn-warning edit-cuti" title="Edit Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-edit"></span></button>
+                                            <button class="btn btn-xs btn-success approve-cuti" title="Approve Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-check"></span></button>
+                                            <button class="btn btn-xs btn-danger delete-cuti" title="Hapus Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-trash"></span></button>
+
+                                        <?php } ?>
                                     </div>
                                 </td>
                             </tr>
@@ -109,6 +125,19 @@
         </div>
     </div>
 
+    <div class="modal fade" id="showcutimodal" tabindex="-1" role="dialog" aria-labelledby="showcutimodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="showcutimodallabel"><span class="fas fa-user-edit mr-1"></span>Detail Data Cuti</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="showdatacuti"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="editcutimodal" tabindex="-1" role="dialog" aria-labelledby="editcutimodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -117,6 +146,19 @@
                 </div>
                 <div class="modal-body">
                     <div id="editdatacuti"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="approvecutimodal" tabindex="-1" role="dialog" aria-labelledby="approvecutimodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="approvecutimodallabel"><span class="fas fa-user-edit mr-1"></span>Approve Data Cuti</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="approvedatacuti"></div>
                 </div>
             </div>
         </div>
@@ -150,7 +192,6 @@
             $("#addcuti-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Proses Penambahan").attr("disabled", true);
             var formdata = new FormData(form);
 
-            console.log(formdata);
             $.ajax({
                 url: "<?= base_url('index.php/cuti/datacuti?type=addcuti'); ?>",
                 type: 'POST',
@@ -252,6 +293,37 @@
             })
         });
 
+
+        $("#cuti").on('click', '.show-cuti', function(e) {
+            e.preventDefault();
+            var id_cuti = $(e.currentTarget).attr('data-cuti-id');
+            if (id_cuti === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/cuti/datacuti?type=showcuti'); ?>',
+                data: {
+                    id_cuti: id_cuti
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan Detail Cuti",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#showcutimodal').modal('show');
+                    $('#showdatacuti').html(data);
+                },
+                error: function() {
+                    swal.fire("Detail Cuti Gagal", "Ada Kesalahan Saat show Cuti!", "error");
+                }
+            });
+        });
+
         $("#cuti").on('click', '.edit-cuti', function(e) {
             e.preventDefault();
             var id_cuti = $(e.currentTarget).attr('data-cuti-id');
@@ -319,6 +391,84 @@
                             error: function() {
                                 swal.fire("Edit Cuti Gagal", "Ada Kesalahan Saat pengeditan Cuti!", "error");
                                 $("#editcuti-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                            }
+                        });
+
+                    });
+                },
+                error: function() {
+                    swal.fire("Edit Cuti Gagal", "Ada Kesalahan Saat pengeditan Cuti!", "error");
+                }
+            });
+        });
+
+        $("#cuti").on('click', '.approve-cuti', function(e) {
+            e.preventDefault();
+            var id_cuti = $(e.currentTarget).attr('data-cuti-id');
+            if (id_cuti === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/cuti/datacuti?type=approvecuti'); ?>',
+                data: {
+                    id_cuti: id_cuti
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan Approve Cuti",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#approvecutimodal').modal('show');
+                    $('#approvedatacuti').html(data);
+
+                    $('#approvecuti').submit(function(e) {
+                        e.preventDefault();
+                        var form = this;
+                        $("#approvecuti-btn").html("<span class='fas fa-spinner fa-pulse' aria-hidden='true' title=''></span> Menyimpan").attr("disabled", true);
+                        var formdata = new FormData(form);
+                        $.ajax({
+                            url: "<?= base_url('index.php/cuti/editcuti?type=approvecutialt'); ?>",
+                            type: 'POST',
+                            data: formdata,
+                            processData: false,
+                            contentType: false,
+                            dataType: 'json',
+                            beforeSend: function() {
+                                swal.fire({
+                                    imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                                    title: "Menyimpan Data Cuti",
+                                    text: "Please wait",
+                                    showConfirmButton: false,
+                                    allowOutsideClick: false
+                                });
+                            },
+                            success: function(response) {
+                                if (response.success == true) {
+                                    $('.text-danger').remove();
+                                    swal.fire({
+                                        icon: 'success',
+                                        title: 'Approve Cuti Berhasil',
+                                        text: 'Approve Cuti sudah berhasil !',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    location.reload();
+                                    form.reset();
+                                    $("#approvecuti-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                } else {
+                                    swal.close()
+                                    $("#approvecuti-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Edit").attr("disabled", false);
+                                    $("#info-edit").html(response.messages);
+                                }
+                            },
+                            error: function() {
+                                swal.fire("Approve Cuti Gagal", "Ada Kesalahan Saat approval Cuti!", "error");
+                                $("#approvecuti-btn").html("<span class='fas fa-pen mr-1' aria-hidden='true' ></span>Simpan").attr("disabled", false);
                             }
                         });
 

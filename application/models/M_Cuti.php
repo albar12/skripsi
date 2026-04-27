@@ -14,6 +14,7 @@ class M_Cuti extends CI_Model
         $this->db->select('table_cuti.*, table_guru.nama');
         $this->db->from('table_cuti');
         $this->db->join("table_guru", "table_guru.nip = table_cuti.nip");
+        $this->db->order_by("table_cuti.id_cuti", "DESC");
         $query = $this->db->get();
 
         return $query;
@@ -59,6 +60,14 @@ class M_Cuti extends CI_Model
                 'tanggal' => htmlspecialchars($this->input->post('tanggal_edit')),
                 'waktu' => htmlspecialchars($this->input->post('waktu_edit')),
                 'alasan' => htmlspecialchars($this->input->post('alasan_edit')),
+            ];
+
+            $this->db->set($sendsave);
+            $this->db->where('id_cuti', $this->input->post('id_cuti'));
+            $this->db->update('table_cuti');
+        } elseif ($typesend == 'approvecutialt') {
+            $sendsave = [
+                'status' => htmlspecialchars($this->input->post('approve')),
             ];
 
             $this->db->set($sendsave);

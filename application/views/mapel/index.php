@@ -41,6 +41,7 @@
                                 <td><?php echo $r->nama_admin ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
+                                        <button class="btn btn-xs btn-primary show-mapel" title="Show Mapel" data-mapel-id="<?php echo $r->id_mapel ?>"><span class="fas fa-eye"></span></button>
                                         <button class="btn btn-xs btn-warning edit-mapel" title="Edit Mapel" data-mapel-id="<?php echo $r->id_mapel ?>"><span class="fas fa-user-edit"></span></button>
                                         <button class="btn btn-xs btn-danger delete-mapel" title="Hapus Mapel" data-mapel-id="<?php echo $r->id_mapel ?>"><span class="fas fa-trash"></span></button>
                                     </div>
@@ -78,6 +79,19 @@
                     <button type="submit" class="btn btn-xs btn-primary" id="addmapel-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="showmapelmodal" tabindex="-1" role="dialog" aria-labelledby="showmapelmodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="showmapelmodallabel"><span class="fas fa-user-edit mr-1"></span>Detail Data Mata Pelajaran</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="showdatamapel"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -225,6 +239,37 @@
             })
         });
 
+
+        $("#mapel").on('click', '.show-mapel', function(e) {
+            e.preventDefault();
+            var id_mapel = $(e.currentTarget).attr('data-mapel-id');
+            if (id_mapel === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/mapel/datamapel?type=showmapel'); ?>',
+                data: {
+                    id_mapel: id_mapel
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan Detail Mata Pelajaran",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#showmapelmodal').modal('show');
+                    $('#showdatamapel').html(data);
+                },
+                error: function() {
+                    swal.fire("Edit Mata Pelajaran Gagal", "Ada Kesalahan Saat pengeditan Mata Pelajaran!", "error");
+                }
+            });
+        });
+
         $("#mapel").on('click', '.edit-mapel', function(e) {
             e.preventDefault();
             var id_mapel = $(e.currentTarget).attr('data-mapel-id');
@@ -298,23 +343,9 @@
                     });
                 },
                 error: function() {
-                    swal.fire("Edit Barang Masuk Gagal", "Ada Kesalahan Saat pengeditan Barang Masuk!", "error");
+                    swal.fire("Edit Mata Pelajaran Gagal", "Ada Kesalahan Saat pengeditan Mata Pelajaran!", "error");
                 }
             });
         });
     });
-
-    function kategori_change() {
-        var id_kategori = $('#id_kategori').val();
-        $.ajax({
-            type: "POST",
-            url: '<?= base_url('index.php/barangmasuk/get_produk'); ?>',
-            data: {
-                id_kategori: id_kategori
-            },
-            success: function(data) {
-                $('#id_produk').html(data);
-            },
-        });
-    }
 </script>

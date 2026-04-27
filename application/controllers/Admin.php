@@ -81,6 +81,14 @@ class Admin extends CI_Controller
                     'success' => true
                 ];
             }
+        } elseif ($typesend == 'showadmin') {
+            $data['admin'] =  $this->M_Admin->getbyid($this->input->post('id_admin'));
+            $html = $this->load->view('admin/show_admin', $data);
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
         } elseif ($typesend == 'deladmin') {
 
             $this->M_Admin->crudadmin($typesend);

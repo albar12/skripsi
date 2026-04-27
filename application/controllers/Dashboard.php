@@ -13,17 +13,19 @@ class Dashboard extends CI_Controller
     {
         parent::__construct();
         $this->load->model('M_Dashboard');
-        $this->load->model('M_Barangmasuk');
         $this->load->database();
     }
+
     public function index()
     {
         $data = [
             'title' => 'Dashboard',
-            'jml_barang_masuk' => $this->M_Dashboard->count_barang_masuk(),
-            'jml_barang_keluar' => $this->M_Dashboard->count_barang_keluar(),
-            'jml_user' => $this->M_Dashboard->count_user(),
-            'jml_pelanggan' => $this->M_Dashboard->count_pelanggan(),
+            'jml_guru' => $this->M_Dashboard->count_guru(),
+            'jml_hadir' => $this->M_Dashboard->count_hadir(),
+            'jml_izin' => $this->M_Dashboard->count_izin(),
+            'jml_sakit' => $this->M_Dashboard->count_sakit(),
+            'jml_alpha' => $this->M_Dashboard->count_alpha(),
+            'jml_cuti' => $this->M_Dashboard->count_cuti(),
 
         ];
         $this->load->view('layout/helper_login', $data);
@@ -51,18 +53,15 @@ class Dashboard extends CI_Controller
         $start = intval($this->input->get("start"));
         $length = intval($this->input->get("length"));
         $data = [];
-        if ($datatype == 'barang_masuk') {
-            $query = $this->M_Dashboard->get_barangmasuk();
-            // $query = $this->db->get("tb_kodepos");
+        if ($datatype == 'jml_guru') {
+            $query = $this->M_Dashboard->get_jml_guru();
             foreach ($query->result() as $r) {
-                $jml_produk = $this->M_Dashboard->count_produk($r->produk_id);
-
                 $data[] = [
                     $no++,
-                    $r->nama_kategori,
-                    $r->nama_produk,
-                    $jml_produk,
-
+                    $r->nip,
+                    $r->nama,
+                    $r->jk,
+                    $r->jabatan,
                 ];
             }
 
@@ -72,46 +71,16 @@ class Dashboard extends CI_Controller
                 "recordsFiltered" => $query->num_rows(),
                 "data" => $data
             );
-        } elseif ($datatype == 'barang_keluar') {
-            $query = $this->M_Dashboard->get_barangkeluar();
+        } elseif ($datatype == 'jml_hadir') {
+            $query = $this->M_Dashboard->get_jml_hadir();
             // $query = $this->db->get("tb_kodepos");
             foreach ($query->result() as $r) {
-                $jml_produk = $this->M_Dashboard->count_produk_keluar($r->produk_id);
-
-                $data[] = [
-                    $no++,
-                    $r->nama_kategori,
-                    $r->nama_produk,
-                    $jml_produk,
-
-                ];
-            }
-
-            $result = array(
-                "draw" => $draw,
-                "recordsTotal" => $query->num_rows(),
-                "recordsFiltered" => $query->num_rows(),
-                "data" => $data
-            );
-        } elseif ($datatype == 'user') {
-            $query = $this->M_Dashboard->get_user();
-            // $query = $this->db->get("tb_kodepos");
-            foreach ($query->result() as $r) {
-                if ($r->posisi == '1') {
-                    $posisi = "Administrator";
-                } elseif ($r->posisi == '2') {
-                    $posisi = "Owner";
-                } elseif ($r->posisi == '3') {
-                    $posisi = "Supervisor";
-                } elseif ($r->posisi == '4') {
-                    $posisi = "Team Produk";
-                }
+                $status = '<span class="badge badge-success">' . $r->status . '</span>';
                 $data[] = [
                     $no++,
                     $r->nama,
-                    $r->username,
-                    $posisi,
-
+                    $r->tanggal,
+                    $status,
                 ];
             }
 
@@ -121,16 +90,76 @@ class Dashboard extends CI_Controller
                 "recordsFiltered" => $query->num_rows(),
                 "data" => $data
             );
-        } elseif ($datatype == 'pelanggan') {
-            $query = $this->M_Dashboard->get_pelanggan();
-            // $query = $this->db->get("tb_kodepos");
+        } elseif ($datatype == 'jml_izin') {
+            $query = $this->M_Dashboard->get_jml_izin();
             foreach ($query->result() as $r) {
+                $status = '<span class="badge badge-primary">' . $r->status . '</span>';
                 $data[] = [
                     $no++,
-                    $r->nama_pelanggan,
-                    $r->tlp_pelanggan,
-                    $r->jenis_kelamin,
+                    $r->nama,
+                    $r->tanggal,
+                    $status,
+                ];
+            }
 
+            $result = array(
+                "draw" => $draw,
+                "recordsTotal" => $query->num_rows(),
+                "recordsFiltered" => $query->num_rows(),
+                "data" => $data
+            );
+        } elseif ($datatype == 'jml_sakit') {
+            $query = $this->M_Dashboard->get_jml_sakit();
+            foreach ($query->result() as $r) {
+                $status = '<span class="badge badge-secondary">' . $r->status . '</span>';
+                $data[] = [
+                    $no++,
+                    $r->nama,
+                    $r->tanggal,
+                    $status,
+                ];
+            }
+
+            $result = array(
+                "draw" => $draw,
+                "recordsTotal" => $query->num_rows(),
+                "recordsFiltered" => $query->num_rows(),
+                "data" => $data
+            );
+        } elseif ($datatype == 'jml_alpha') {
+            $query = $this->M_Dashboard->get_jml_alpha();
+            foreach ($query->result() as $r) {
+                $status = '<span class="badge badge-danger">' . $r->status . '</span>';
+                $data[] = [
+                    $no++,
+                    $r->nama,
+                    $r->tanggal,
+                    $status,
+                ];
+            }
+
+            $result = array(
+                "draw" => $draw,
+                "recordsTotal" => $query->num_rows(),
+                "recordsFiltered" => $query->num_rows(),
+                "data" => $data
+            );
+        } elseif ($datatype == 'jml_cuti') {
+            $query = $this->M_Dashboard->get_jml_cuti();
+            foreach ($query->result() as $r) {
+                if ($r->status == '') {
+                    $status = '<span class="badge badge-primary">Pengajuan</span>';
+                } else if ($r->status == 'Approved') {
+                    $status = '<span class="badge badge-success">' . $r->status . '</span>';
+                } else {
+                    $status = '<span class="badge badge-danger">' . $r->status . '</span>';
+                }
+
+                $data[] = [
+                    $no++,
+                    $r->nama,
+                    $r->tanggal,
+                    $status,
                 ];
             }
 
@@ -149,22 +178,26 @@ class Dashboard extends CI_Controller
     {
 
         $datatype = $this->input->get('type');
-        if ($datatype == 'barang_masuk') {
-            $jml_barang_masuk = $this->M_Dashboard->count_barang_masuk();
+        if ($datatype == 'jml_hadir') {
+            $jml_hadir = $this->M_Dashboard->count_hadir();
 
-            echo $jml_barang_masuk;
-        } else if ($datatype == 'barang_keluar') {
-            $jml_barang_keluar = $this->M_Dashboard->count_barang_keluar();
+            echo $jml_hadir;
+        } else if ($datatype == 'jml_izin') {
+            $jml_izin = $this->M_Dashboard->count_izin();
 
-            echo $jml_barang_keluar;
-        } else if ($datatype == 'user') {
-            $jml_user = $this->M_Dashboard->count_user();
+            echo $jml_izin;
+        } else if ($datatype == 'jml_sakit') {
+            $jml_sakit = $this->M_Dashboard->count_sakit();
 
-            echo $jml_user;
-        } else if ($datatype == 'pelanggan') {
-            $jml_pelanggan = $this->M_Dashboard->count_pelanggan();
+            echo $jml_sakit;
+        } else if ($datatype == 'jml_alpha') {
+            $jml_alpha = $this->M_Dashboard->count_alpha();
 
-            echo $jml_pelanggan;
+            echo $jml_alpha;
+        } else if ($datatype == 'jml_cuti') {
+            $jml_cuti = $this->M_Dashboard->count_cuti();
+
+            echo $jml_cuti;
         }
     }
 }

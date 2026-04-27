@@ -83,6 +83,15 @@ class Cuti extends CI_Controller
                     'success' => true
                 ];
             }
+        } elseif ($typesend == 'showcuti') {
+            $data['cuti'] =  $this->M_Cuti->getbyid($this->input->post("id_cuti"));
+            $data['guru'] =  $this->M_Cuti->get_guru();
+            $html = $this->load->view('cuti/show_cuti', $data);
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
         } elseif ($typesend == 'delcuti') {
 
             $this->M_Cuti->crudcuti($typesend);
@@ -90,6 +99,15 @@ class Cuti extends CI_Controller
             $data['cuti'] =  $this->M_Cuti->getbyid($this->input->post("id_cuti"));
             $data['guru'] =  $this->M_Cuti->get_guru();
             $html = $this->load->view('cuti/edit_cuti', $data);
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
+        } elseif ($typesend == 'approvecuti') {
+            $data['cuti'] =  $this->M_Cuti->getbyid($this->input->post("id_cuti"));
+            $data['guru'] =  $this->M_Cuti->get_guru();
+            $html = $this->load->view('cuti/approve_cuti', $data);
             $reponse = [
                 'html' => $html,
                 'csrfName' => $this->security->get_csrf_token_name(),
@@ -139,6 +157,34 @@ class Cuti extends CI_Controller
                 [
                     'field' => 'alasan_edit',
                     'label' => 'Alasan',
+                    'rules' => 'trim|required|xss_clean',
+                    'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
+                ],
+
+            ];
+            $this->form_validation->set_rules($validation);
+            if ($this->form_validation->run() == FALSE) {
+                $reponse['messages'] = '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>';
+            } else {
+                $this->M_Cuti->crudcuti($typesend);
+                $reponse = [
+                    'csrfName' => $this->security->get_csrf_token_name(),
+                    'csrfHash' => $this->security->get_csrf_hash(),
+                    'success' => true
+                ];
+            }
+        } else if ($typesend == "approvecutialt") {
+            $reponse = [
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash(),
+                'success' => False,
+                'messages' => []
+            ];
+
+            $validation = [
+                [
+                    'field' => 'approve',
+                    'label' => 'Approve',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],

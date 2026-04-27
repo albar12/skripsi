@@ -44,6 +44,7 @@
                                 <td><?php echo $r->role ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
+                                        <button class="btn btn-xs btn-primary show-admin" title="Show Admin" data-admin-id="<?php echo $r->id_admin ?>"><span class="fas fa-eye"></span></button>
                                         <button class="btn btn-xs btn-warning edit-admin" title="Edit Admin" data-admin-id="<?php echo $r->id_admin ?>"><span class="fas fa-edit"></span></button>
                                         <button class="btn btn-xs btn-danger delete-admin" title="Hapus Admin" data-admin-id="<?php echo $r->id_admin ?>"><span class="fas fa-trash"></span></button>
                                     </div>
@@ -108,17 +109,14 @@
         </div>
     </div>
 
-    <div class="modal fade" id="viewpenjualanmodal" tabindex="-1" role="dialog" aria-labelledby="viewpenjualanmodal" aria-hidden="true">
+    <div class="modal fade" id="showadminmodal" tabindex="-1" role="dialog" aria-labelledby="showadminmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-center" id="viewpenjualanmodallabel"><span class="fas fa-list"></span> View Penjualan</h5>
+                    <h5 class="modal-title text-center" id="showadminmodallabel"><span class="fas fa-list"></span> Detail Data Admin</h5>
                 </div>
                 <div class="modal-body">
-                    <div id="viewdatapenjualan"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal">Tutup</button>
+                    <div id="showdataadmin"></div>
                 </div>
             </div>
         </div>
@@ -287,6 +285,36 @@
             })
         });
 
+        $("#admin").on('click', '.show-admin', function(e) {
+            e.preventDefault();
+            var id_admin = $(e.currentTarget).attr('data-admin-id');
+            if (id_admin === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/admin/dataadmin?type=showadmin'); ?>',
+                data: {
+                    id_admin: id_admin
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan detail Admin",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#showadminmodal').modal('show');
+                    $('#showdataadmin').html(data);
+                },
+                error: function() {
+                    swal.fire("Show Admin Gagal", "Ada Kesalahan Saat detail Admin!", "error");
+                }
+            });
+        });
+
         $("#admin").on('click', '.edit-admin', function(e) {
             e.preventDefault();
             var id_admin = $(e.currentTarget).attr('data-admin-id');
@@ -360,7 +388,7 @@
                     });
                 },
                 error: function() {
-                    swal.fire("Edit Supplier Gagal", "Ada Kesalahan Saat pengeditan Supplier!", "error");
+                    swal.fire("Detail Admin Gagal", "Ada Kesalahan Saat detail Admin!", "error");
                 }
             });
         });

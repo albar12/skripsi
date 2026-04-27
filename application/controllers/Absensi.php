@@ -71,6 +71,15 @@ class Absensi extends CI_Controller
                     'success' => true
                 ];
             }
+        } elseif ($typesend == 'showabsensi') {
+            $data['absensi'] =  $this->M_Absensi->getbyid($this->input->post('id_absensi'));
+            $data['guru'] = $this->M_Absensi->get_guru();
+            $html = $this->load->view('absensi/show_absensi', $data);
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
         } elseif ($typesend == 'delabsensi') {
 
             $this->M_Absensi->crudabsensi($typesend);

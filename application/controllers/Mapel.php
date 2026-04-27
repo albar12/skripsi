@@ -63,6 +63,14 @@ class Mapel extends CI_Controller
                     'success' => true
                 ];
             }
+        } elseif ($typesend == 'showmapel') {
+            $data['mapel'] = $this->M_Mapel->getbyid($this->input->post("id_mapel"));
+            $html = $this->load->view('mapel/show_mapel', $data);
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
         } elseif ($typesend == 'delmapel') {
 
             $this->M_Mapel->crudmapel($typesend);

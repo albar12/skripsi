@@ -46,6 +46,7 @@
                                 <td><?php echo $r->role ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
+                                        <button class="btn btn-xs btn-primary show-kepsek" title="Detail Kepala Sekolah" data-kepsek-id="<?php echo $r->nip ?>"><span class="fas fa-eye"></span></button>
                                         <button class="btn btn-xs btn-warning edit-kepsek" title="Edit Kepala Sekolah" data-kepsek-id="<?php echo $r->nip ?>"><span class="fas fa-edit"></span></button>
                                         <button class="btn btn-xs btn-danger delete-kepsek" title="Hapus Kepala Sekolah" data-kepsek-id="<?php echo $r->nip ?>"><span class="fas fa-trash"></span></button>
                                     </div>
@@ -107,6 +108,19 @@
                     <button type="submit" class="btn btn-xs btn-primary" id="addkepsek-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="showkepsekmodal" tabindex="-1" role="dialog" aria-labelledby="showkepsekmodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="showkepsekmodallabel"><span class="fas fa-user-edit mr-1"></span>Detail Data Kepala Sekolah</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="showdatakepsek"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -270,6 +284,36 @@
                     });
                 }
             })
+        });
+
+        $("#kepala_sekolah").on('click', '.show-kepsek', function(e) {
+            e.preventDefault();
+            var nip = $(e.currentTarget).attr('data-kepsek-id');
+            if (nip === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/kepalasekolah/datakepsek?type=showkepsek'); ?>',
+                data: {
+                    nip: nip
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan Detail Kepala Sekolah",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#showkepsekmodal').modal('show');
+                    $('#showdatakepsek').html(data);
+                },
+                error: function() {
+                    swal.fire("Detail Kepala Sekolah Gagal", "Ada Kesalahan Saat detail Kepala Sekolah!", "error");
+                }
+            });
         });
 
         $("#kepala_sekolah").on('click', '.edit-kepsek', function(e) {

@@ -46,6 +46,7 @@
                                 <td><?php echo $r->jabatan ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
+                                        <button class="btn btn-xs btn-primary show-guru" title="Show Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-eye"></span></button>
                                         <button class="btn btn-xs btn-warning edit-guru" title="Edit Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-user-edit"></span></button>
                                         <button class="btn btn-xs btn-danger delete-guru" title="Hapus Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-trash"></span></button>
                                     </div>
@@ -133,6 +134,19 @@
                     <button type="submit" class="btn btn-xs btn-primary" id="addguru-btn"><span class="fas fa-plus mr-1"></span>Simpan</button>
                 </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="showgurumodal" tabindex="-1" role="dialog" aria-labelledby="showgurumodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="showgurumodallabel"><span class="fas fa-user-edit mr-1"></span>Detail Data Guru</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="showdataguru"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -278,6 +292,36 @@
                     });
                 }
             })
+        });
+
+        $("#guru").on('click', '.show-guru', function(e) {
+            e.preventDefault();
+            var nip = $(e.currentTarget).attr('data-guru-id');
+            if (nip === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/guru/dataguru?type=showguru'); ?>',
+                data: {
+                    nip: nip
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan Detail Guru",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#showgurumodal').modal('show');
+                    $('#showdataguru').html(data);
+                },
+                error: function() {
+                    swal.fire("Show Guru Gagal", "Ada Kesalahan Saat detail Guru!", "error");
+                }
+            });
         });
 
         $("#guru").on('click', '.edit-guru', function(e) {

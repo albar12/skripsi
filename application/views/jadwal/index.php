@@ -45,6 +45,7 @@
                                 <td><?php echo $r->nama_admin ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
+                                        <button class="btn btn-xs btn-primary show-jadwal" title="Show Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-eye"></span></button>
                                         <button class="btn btn-xs btn-warning edit-jadwal" title="Edit Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-edit"></span></button>
                                         <button class="btn btn-xs btn-danger delete-jadwal" title="Hapus Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-trash"></span></button>
                                     </div>
@@ -105,6 +106,18 @@
         </div>
     </div>
 
+    <div class="modal fade" id="showjadwalmodal" tabindex="-1" role="dialog" aria-labelledby="showjadwalmodal" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="showjadwalmodallabel"><span class="fas fa-user-edit mr-1"></span>Detail Data Jadwal</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="showdatajadwal"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="editjadwalmodal" tabindex="-1" role="dialog" aria-labelledby="editjadwalmodal" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -249,6 +262,36 @@
                     });
                 }
             })
+        });
+
+        $("#jadwal").on('click', '.show-jadwal', function(e) {
+            e.preventDefault();
+            var id_jadwal = $(e.currentTarget).attr('data-jadwal-id');
+            if (id_jadwal === '') return;
+            $.ajax({
+                type: "POST",
+                url: '<?= base_url('index.php/jadwal/datajadwal?type=showjadwal'); ?>',
+                data: {
+                    id_jadwal: id_jadwal
+                },
+                beforeSend: function() {
+                    swal.fire({
+                        imageUrl: "<?= base_url('assets'); ?>/img/ajax-loader.gif",
+                        title: "Mempersiapkan Detail jadwal",
+                        text: "Please wait",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('#showjadwalmodal').modal('show');
+                    $('#showdatajadwal').html(data);
+                },
+                error: function() {
+                    swal.fire("Detail Jadwal Gagal", "Ada Kesalahan Saat detail Jadwal!", "error");
+                }
+            });
         });
 
         $("#jadwal").on('click', '.edit-jadwal', function(e) {

@@ -96,6 +96,15 @@ class Guru extends CI_Controller
                     'success' => true
                 ];
             }
+        } elseif ($typesend == 'showguru') {
+            $data['guru'] =  $this->M_Guru->getbyid($this->input->post('nip'));
+            $html = $this->load->view('guru/show_guru', $data);
+
+            $reponse = [
+                'html' => $html,
+                'csrfName' => $this->security->get_csrf_token_name(),
+                'csrfHash' => $this->security->get_csrf_hash()
+            ];
         } elseif ($typesend == 'delguru') {
 
             $this->M_Guru->crudguru($typesend);
