@@ -55,6 +55,7 @@
                     $("#info-data").html(response.messages).attr("disabled", false).show();
                     if (response.success == true) {
                         $('.text-danger').remove();
+                        $("#info-data").html(response.messages).hide();
                         $("#nip_input").hide();
                         $("#btn_submit").hide();
                         $("#qr_image").html(response.qr);
