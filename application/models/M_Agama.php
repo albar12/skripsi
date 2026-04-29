@@ -17,6 +17,7 @@ class M_Agama extends CI_Model
         $this->db->join('table_user AS input', "input.id_user = table_agama.create_admin");
         $this->db->join('table_user AS update', "update.id_user = table_agama.update_admin", "left");
         $this->db->where('table_agama.status !=', '3');
+        $this->db->order_by("id_agama", "DESC");
         $query = $this->db->get();
 
         return $query;

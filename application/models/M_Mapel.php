@@ -18,6 +18,7 @@ class M_Mapel extends CI_Model
         $this->db->join("table_user AS input", "input.id_user = table_mapel.create_admin");
         $this->db->join("table_user AS update", "update.id_user = table_mapel.update_admin", "left");
         $this->db->where("table_mapel.status !=", '3');
+        $this->db->order_by("table_mapel.id_mapel", "DESC");
         $query = $this->db->get();
 
         return $query;

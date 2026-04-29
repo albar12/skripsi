@@ -147,106 +147,118 @@
             <div class="tab-content" id="myTabContent">
                 <div id="jml_guru_tab">
                     <div class="container-fluid">
-                        <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_guru">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">NIP</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Jenis Kelamin</th>
-                                    <th scope="col">Jabatan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_guru">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">NIP</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Jenis Kelamin</th>
+                                        <th scope="col">Jabatan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <div style="display: none;" id="jml_hadir_tab">
                     <div class="container-fluid">
-                        <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_hadir">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_hadir">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Tanggal</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <div style="display: none;" id="jml_izin_tab">
                     <div class="container-fluid">
-                        <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_izin">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_izin">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Tanggal</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <div style="display: none;" id="jml_sakit_tab">
                     <div class="container-fluid">
-                        <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_sakit">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_sakit">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Tanggal</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <div style="display: none;" id="jml_alpha_tab">
                     <div class="container-fluid">
-                        <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_alpha">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_alpha">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Tanggal</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
                 <div style="display: none;" id="jml_cuti_tab">
                     <div class="container-fluid">
-                        <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_cuti">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Tanggal</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" width="100%" cellspacing="0" id="lap_jml_cuti">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Tanggal</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -277,6 +289,8 @@
     $(document).ready(function() {
 
         let table_jml_guru = new DataTable('#lap_jml_guru', {
+            responsive: true,
+            autoWidth: false,
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_guru'); ?>",
                 type: 'post',
@@ -297,6 +311,8 @@
 
 
         let table_jml_hadir = new DataTable('#lap_jml_hadir', {
+            responsive: true,
+            autoWidth: false,
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_hadir'); ?>",
                 type: 'post',
@@ -316,6 +332,8 @@
         });
 
         let table_jml_izin = new DataTable('#lap_jml_izin', {
+            responsive: true,
+            autoWidth: false,
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_izin'); ?>",
                 type: 'post',
@@ -335,6 +353,8 @@
         });
 
         let table_jml_sakit = new DataTable('#lap_jml_sakit', {
+            responsive: true,
+            autoWidth: false,
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_sakit'); ?>",
                 type: 'post',
@@ -354,6 +374,8 @@
         });
 
         let table_jml_alpha = new DataTable('#lap_jml_alpha', {
+            responsive: true,
+            autoWidth: false,
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_alpha'); ?>",
                 type: 'post',
@@ -373,6 +395,8 @@
         });
 
         let table_jml_cuti = new DataTable('#lap_jml_cuti', {
+            responsive: true,
+            autoWidth: false,
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_cuti'); ?>",
                 type: 'post',

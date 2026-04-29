@@ -21,56 +21,58 @@
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped " id="jadwal">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Mata Pelajaran</th>
-                            <th scope="col">Jam Mulai</th>
-                            <th scope="col">Jam Selesai</th>
-                            <th scope="col">Admin Input</th>
-                            <th scope="col">Tanggal Input</th>
-                            <th scope="col">Admin Update</th>
-                            <th scope="col">Tanggal Update</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $no = 1;
-                        foreach ($jadwal->result() as $r) {
-                        ?>
-                            <?php
-                            if ($r->status == '1') {
-                                $status = '<span class="badge badge-success">' . $r->nama_status . '</span>';
-                            } else if ($r->status == '2') {
-                                $status = '<span class="badge badge-secondary">' . $r->nama_status . '</span>';
-                            } else {
-                                $status = '<span class="badge badge-danger">' . $r->nama_status . '</span>';
-                            }
-                            ?>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped " id="jadwal">
+                        <thead class="thead-dark">
                             <tr>
-                                <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama_mapel ?></td>
-                                <td><?php echo $r->jam_mulai ?></td>
-                                <td><?php echo $r->jam_selesai ?></td>
-                                <td><?php echo $r->admin_input ?></td>
-                                <td><?php echo $r->create_date ?></td>
-                                <td><?php echo $r->admin_update ?></td>
-                                <td><?php echo $r->update_date ?></td>
-                                <td><?php echo $status ?></td>
-                                <td>
-                                    <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-primary show-jadwal" title="Show Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-eye"></span></button>
-                                        <button class="btn btn-xs btn-warning edit-jadwal" title="Edit Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-jadwal" title="Hapus Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-trash"></span></button>
-                                    </div>
-                                </td>
+                                <th scope="col">No</th>
+                                <th scope="col">Mata Pelajaran</th>
+                                <th scope="col">Jam Mulai</th>
+                                <th scope="col">Jam Selesai</th>
+                                <th scope="col">Admin Input</th>
+                                <th scope="col">Tanggal Input</th>
+                                <th scope="col">Admin Update</th>
+                                <th scope="col">Tanggal Update</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
                             </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $no = 1;
+                            foreach ($jadwal->result() as $r) {
+                            ?>
+                                <?php
+                                if ($r->status == '1') {
+                                    $status = '<span class="badge badge-success">' . $r->nama_status . '</span>';
+                                } else if ($r->status == '2') {
+                                    $status = '<span class="badge badge-secondary">' . $r->nama_status . '</span>';
+                                } else {
+                                    $status = '<span class="badge badge-danger">' . $r->nama_status . '</span>';
+                                }
+                                ?>
+                                <tr>
+                                    <td><?php echo $no++ ?></td>
+                                    <td><?php echo $r->nama_mapel ?></td>
+                                    <td><?php echo $r->jam_mulai ?></td>
+                                    <td><?php echo $r->jam_selesai ?></td>
+                                    <td><?php echo $r->admin_input ?></td>
+                                    <td><?php echo $r->create_date ?></td>
+                                    <td><?php echo $r->admin_update ?></td>
+                                    <td><?php echo $r->update_date ?></td>
+                                    <td><?php echo $status ?></td>
+                                    <td>
+                                        <div class="btn-group btn-small " style="text-align: right;">
+                                            <button class="btn btn-xs btn-primary show-jadwal" title="Show Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-eye"></span></button>
+                                            <button class="btn btn-xs btn-warning edit-jadwal" title="Edit Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-edit"></span></button>
+                                            <button class="btn btn-xs btn-danger delete-jadwal" title="Hapus Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-trash"></span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -166,7 +168,10 @@
 <script>
     $(document).ready(function() {
 
-        let table = new DataTable('#jadwal');
+        let table = $('#jadwal').DataTable({
+            responsive: true,
+            autoWidth: false
+        });
 
 
         $('#addjadwal').submit(function(e) {

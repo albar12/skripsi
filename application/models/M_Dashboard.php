@@ -151,6 +151,7 @@ class M_Dashboard extends CI_Model
         $this->db->from('table_user');
         $this->db->join("table_jabatan", "table_jabatan.id_jabatan = table_user.jabatan");
         $this->db->where('table_user.status !=', '3');
+        $this->db->order_by("id_user", "DESC");
         $query = $this->db->get();
         return $query;
     }
@@ -171,6 +172,7 @@ class M_Dashboard extends CI_Model
         $this->db->from('table_absensi');
         $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "Hadir");
+        $this->db->order_by("table_absensi.id_absensi", "DESC");
         $query = $this->db->get();
 
         return $query;
@@ -192,6 +194,7 @@ class M_Dashboard extends CI_Model
         $this->db->from('table_absensi');
         $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "izin");
+        $this->db->order_by("table_absensi.id_absensi", "DESC");
         $query = $this->db->get();
 
         return $query;
@@ -213,6 +216,7 @@ class M_Dashboard extends CI_Model
         $this->db->from('table_absensi');
         $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "Sakit");
+        $this->db->order_by("table_absensi.id_absensi", "DESC");
         $query = $this->db->get();
 
         return $query;
@@ -234,6 +238,7 @@ class M_Dashboard extends CI_Model
         $this->db->from('table_absensi');
         $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "Alpha");
+        $this->db->order_by("table_absensi.id_absensi", "DESC");
         $query = $this->db->get();
 
         return $query;
@@ -254,6 +259,8 @@ class M_Dashboard extends CI_Model
         $this->db->select('table_cuti.*, table_user.nama');
         $this->db->from('table_cuti');
         $this->db->join('table_user', 'table_user.id_user = table_cuti.id_user');
+        $this->db->where("table_cuti.status !=", "3");
+        $this->db->order_by("table_cuti.id_cuti", "DESC");
         $query = $this->db->get();
 
         return $query;

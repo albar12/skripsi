@@ -146,12 +146,12 @@ class Dashboard extends CI_Controller
         } elseif ($datatype == 'jml_cuti') {
             $query = $this->M_Dashboard->get_jml_cuti();
             foreach ($query->result() as $r) {
-                if ($r->status == '') {
+                if ($r->status_approval == '') {
                     $status = '<span class="badge badge-primary">Pengajuan</span>';
-                } else if ($r->status == 'Approved') {
-                    $status = '<span class="badge badge-success">' . $r->status . '</span>';
+                } else if ($r->status_approval == 'Approve') {
+                    $status = '<span class="badge badge-success">' . $r->status_approval . '</span>';
                 } else {
-                    $status = '<span class="badge badge-danger">' . $r->status . '</span>';
+                    $status = '<span class="badge badge-danger">' . $r->status_approval . '</span>';
                 }
 
                 $data[] = [

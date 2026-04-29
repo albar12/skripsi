@@ -18,6 +18,7 @@ class M_Jadwal extends CI_Model
         $this->db->join('table_user AS input', 'input.id_user = table_jadwal.create_admin');
         $this->db->join('table_user AS update', 'update.id_user = table_jadwal.update_admin', 'left');
         $this->db->where("table_jadwal.status !=", '3');
+        $this->db->order_by("table_jadwal.id_jadwal", "DESC");
         $query = $this->db->get();
 
         return $query;

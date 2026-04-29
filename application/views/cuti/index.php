@@ -21,64 +21,66 @@
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped " id="cuti">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Nama</th>
-                            <th scope="col">Tanggal</th>
-                            <th scope="col">Waktu</th>
-                            <th scope="col">Alasan</th>
-                            <th scope="col">Admin Input</th>
-                            <th scope="col">Tanggal Input</th>
-                            <th scope="col">Admin Update</th>
-                            <th scope="col">Tanggal Update</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $no = 1;
-                        foreach ($cuti->result() as $r) { ?>
-                            <?php
-                            if ($r->status_approval == '') {
-                                $status = '<span class="badge badge-primary">Pengajuan</span>';
-                            } else if ($r->status_approval == 'Approve') {
-                                $status = '<span class="badge badge-success">' . $r->status_approval . '</span>';
-                            } else {
-                                $status = '<span class="badge badge-danger">' . $r->status_approval . '</span>';
-                            }
-                            ?>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped " id="cuti">
+                        <thead class="thead-dark">
                             <tr>
-                                <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama ?></td>
-                                <td><?php echo $r->tanggal ?></td>
-                                <td><?php echo $r->waktu . " Hari" ?></td>
-                                <td><?php echo $r->alasan ?></td>
-                                <td><?php echo $r->admin_input ?></td>
-                                <td><?php echo $r->create_date ?></td>
-                                <td><?php echo $r->admin_update ?></td>
-                                <td><?php echo $r->update_date ?></td>
-                                <td><?php echo $status ?></td>
-                                <td>
-                                    <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-primary show-cuti" title="Show Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-eye"></span></button>
-                                        <?php if (!$r->status_approval) { ?>
-                                            <?php if ($r->id_user == $this->session->userdata("id_user")) { ?>
-                                                <button class="btn btn-xs btn-warning edit-cuti" title="Edit Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-edit"></span></button>
-                                                <button class="btn btn-xs btn-danger delete-cuti" title="Hapus Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-trash"></span></button>
-                                            <?php } ?>
-                                            <?php if ($this->session->userdata("jabatan") == "1" || $this->session->userdata("jabatan") == "2") { ?>
-                                                <button class="btn btn-xs btn-success approve-cuti" title="Approve Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-check"></span></button>
-                                            <?php } ?>
-                                        <?php } ?>
-                                    </div>
-                                </td>
+                                <th scope="col">No</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Waktu</th>
+                                <th scope="col">Alasan</th>
+                                <th scope="col">Admin Input</th>
+                                <th scope="col">Tanggal Input</th>
+                                <th scope="col">Admin Update</th>
+                                <th scope="col">Tanggal Update</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
                             </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $no = 1;
+                            foreach ($cuti->result() as $r) { ?>
+                                <?php
+                                if ($r->status_approval == '') {
+                                    $status = '<span class="badge badge-primary">Pengajuan</span>';
+                                } else if ($r->status_approval == 'Approve') {
+                                    $status = '<span class="badge badge-success">' . $r->status_approval . '</span>';
+                                } else {
+                                    $status = '<span class="badge badge-danger">' . $r->status_approval . '</span>';
+                                }
+                                ?>
+                                <tr>
+                                    <td><?php echo $no++ ?></td>
+                                    <td><?php echo $r->nama ?></td>
+                                    <td><?php echo $r->tanggal ?></td>
+                                    <td><?php echo $r->waktu . " Hari" ?></td>
+                                    <td><?php echo $r->alasan ?></td>
+                                    <td><?php echo $r->admin_input ?></td>
+                                    <td><?php echo $r->create_date ?></td>
+                                    <td><?php echo $r->admin_update ?></td>
+                                    <td><?php echo $r->update_date ?></td>
+                                    <td><?php echo $status ?></td>
+                                    <td>
+                                        <div class="btn-group btn-small " style="text-align: right;">
+                                            <button class="btn btn-xs btn-primary show-cuti" title="Show Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-eye"></span></button>
+                                            <?php if (!$r->status_approval) { ?>
+                                                <?php if ($r->id_user == $this->session->userdata("id_user")) { ?>
+                                                    <button class="btn btn-xs btn-warning edit-cuti" title="Edit Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-edit"></span></button>
+                                                    <button class="btn btn-xs btn-danger delete-cuti" title="Hapus Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-trash"></span></button>
+                                                <?php } ?>
+                                                <?php if ($this->session->userdata("jabatan") == "1" || $this->session->userdata("jabatan") == "2") { ?>
+                                                    <button class="btn btn-xs btn-success approve-cuti" title="Approve Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-check"></span></button>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -197,7 +199,10 @@
 <script>
     $(document).ready(function() {
 
-        let table = new DataTable('#cuti');
+        let table = $('#cuti').DataTable({
+            responsive: true,
+            autoWidth: false
+        });
 
 
         $('#addcuti').submit(function(e) {

@@ -21,49 +21,52 @@
         </div>
         <div class="content-header">
             <div class="container-fluid">
-                <table class="table table-bordered table-striped " id="absensi">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Nama</th>
-                            <th scope="col">Tanggal Absen</th>
-                            <th scope="col">Jam Absen</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $no = 1;
-                        foreach ($absensi->result() as $r) { ?>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped " id="absensi">
+                        <thead class="thead-dark">
                             <tr>
-                                <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nama ?></td>
-                                <td><?php echo $r->tanggal ?></td>
-                                <td><?php echo $r->jam_absen ?></td>
-                                <?php
-                                if ($r->status == "Hadir") {
-                                    $color = "success";
-                                } else if ($r->status == "Izin") {
-                                    $color = "primary";
-                                } else if ($r->status == "Sakit") {
-                                    $color = "secondary";
-                                } else if ($r->status == "Alpha") {
-                                    $color = "danger";
-                                }
-                                ?>
-                                <td><span class="badge badge-<?php echo $color; ?>"><?php echo $r->status ?></span></td>
-                                <td>
-                                    <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-primary show-absensi" title="Detail Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-eye"></span></button>
-                                        <!-- <button class="btn btn-xs btn-warning edit-absensi" title="Edit Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-absensi" title="Hapus Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-trash"></span></button> -->
-                                    </div>
-                                </td>
+                                <th scope="col">No</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">Tanggal Absen</th>
+                                <th scope="col">Jam Absen</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
                             </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $no = 1;
+                            foreach ($absensi->result() as $r) { ?>
+                                <tr>
+                                    <td><?php echo $no++ ?></td>
+                                    <td><?php echo $r->nama ?></td>
+                                    <td><?php echo $r->tanggal ?></td>
+                                    <td><?php echo $r->jam_absen ?></td>
+                                    <?php
+                                    if ($r->status == "Hadir") {
+                                        $color = "success";
+                                    } else if ($r->status == "Izin") {
+                                        $color = "primary";
+                                    } else if ($r->status == "Sakit") {
+                                        $color = "secondary";
+                                    } else if ($r->status == "Alpha") {
+                                        $color = "danger";
+                                    }
+                                    ?>
+                                    <td><span class="badge badge-<?php echo $color; ?>"><?php echo $r->status ?></span></td>
+                                    <td>
+                                        <div class="btn-group btn-small " style="text-align: right;">
+                                            <button class="btn btn-xs btn-primary show-absensi" title="Detail Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-eye"></span></button>
+                                            <!-- <button class="btn btn-xs btn-warning edit-absensi" title="Edit Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-absensi" title="Hapus Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-trash"></span></button> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>
@@ -171,7 +174,10 @@
 <script>
     $(document).ready(function() {
 
-        let table = new DataTable('#absensi');
+        let table = $('#absensi').DataTable({
+            responsive: true,
+            autoWidth: false
+        });
 
 
         $('#addabsensi').submit(function(e) {

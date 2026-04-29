@@ -18,6 +18,7 @@ class M_Guru extends CI_Model
         $this->db->join("table_user AS input", "input.id_user = table_user.create_admin");
         $this->db->join("table_user AS update", "update.id_user = table_user.update_admin", 'left');
         $this->db->where("table_user.status !=", '3');
+        $this->db->order_by("table_user.id_user", "DESC");
         $query = $this->db->get();
 
         return $query;

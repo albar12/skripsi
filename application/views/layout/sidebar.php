@@ -55,14 +55,7 @@
                             Cuti
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/mapel/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'mapel') {
-                                                                                                        echo 'active';
-                                                                                                    } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Mata Pelajaran
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a href="<?php echo base_url('index.php/jadwal/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'jadwal') {
                                                                                                         echo 'active';
@@ -74,6 +67,14 @@
                     <div class="info">
                         <div class="d-block text-white">Setting</div>
                     </div>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('index.php/mapel/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'mapel') {
+                                                                                                        echo 'active';
+                                                                                                    } ?>">
+                            <i class="nav-icon fas fa-edit"></i>
+                            Mata Pelajaran
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="<?php echo base_url('index.php/jabatan/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'jabatan') {
                                                                                                         echo 'active';

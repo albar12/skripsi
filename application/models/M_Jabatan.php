@@ -17,6 +17,7 @@ class M_Jabatan extends CI_Model
         $this->db->join('table_user AS input', "input.id_user = table_jabatan.create_admin");
         $this->db->join('table_user AS update', "update.id_user = table_jabatan.update_admin", 'left');
         $this->db->where('table_jabatan.status !=', '3');
+        $this->db->order_by("table_jabatan.id_jabatan", "DESC");
         $query = $this->db->get();
 
         return $query;

@@ -22,6 +22,8 @@ class M_Absensi extends CI_Model
             $this->db->where("table_absensi.id_user", $id_user);
         }
 
+        $this->db->order_by("id_absensi", "DESC");
+
         $query = $this->db->get();
 
         return $query;
