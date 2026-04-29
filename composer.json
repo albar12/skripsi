@@ -12,7 +12,9 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"phpoffice/phpspreadsheet": "^1.23"
+		"phpoffice/phpspreadsheet": "^1.23",
+		"picqer/php-barcode-generator": "^2.4",
+		"endroid/qr-code": "^4.6"
 	},
 	"config": {
 		"platform": {

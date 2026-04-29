@@ -13,8 +13,9 @@ class Jadwal extends CI_Controller
     public function index()
     {
         $data = [
-            'title' => 'Data Barang Keluar',
+            'title' => 'Data Jadwal',
             'jadwal' => $this->M_Jadwal->get_jadwal(),
+            'mapel' => $this->M_Jadwal->get_mapel(),
         ];
         $this->load->view('layout/helper_login', $data);
         $this->load->view('layout/header', $data);
@@ -42,12 +43,11 @@ class Jadwal extends CI_Controller
 
             $validation = [
                 [
-                    'field' => 'hari',
-                    'label' => 'Hari',
+                    'field' => 'mapel',
+                    'label' => 'Mata Pelajaran',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
-
                 [
                     'field' => 'jam_mulai',
                     'label' => 'Jam Mulai',
@@ -63,11 +63,11 @@ class Jadwal extends CI_Controller
 
             ];
             $this->form_validation->set_rules($validation);
-            $cek_jadwal = $this->M_Jadwal->cek_jadwal($this->input->post("hari"));
+            $cek_jadwal = $this->M_Jadwal->cek_jadwal($this->input->post("mapel"));
             if ($this->form_validation->run() == FALSE) {
                 $reponse['messages'] = '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>';
             } else if ($cek_jadwal != 0) {
-                $reponse['messages'] = '<div class="alert alert-danger" role="alert">Jadwal hari <b>' . $this->input->post("mapel") . '</b> sudah ada silahkan periksa kembali data yang diinput</div>';
+                $reponse['messages'] = '<div class="alert alert-danger" role="alert">Jadwal Mata Pelajaran <b>' . $this->input->post("mapel") . '</b> sudah ada silahkan periksa kembali data yang diinput</div>';
             } else {
                 $this->M_Jadwal->crudjadwal($typesend);
                 $reponse = [
@@ -78,6 +78,8 @@ class Jadwal extends CI_Controller
             }
         } elseif ($typesend == 'showjadwal') {
             $data['jadwal'] =  $this->M_Jadwal->getbyid($this->input->post('id_jadwal'));
+            $data['mapel'] =  $this->M_Jadwal->get_mapel();
+            $data['status'] =  $this->M_Jadwal->get_status();
             $html = $this->load->view('jadwal/show_jadwal', $data);
             $reponse = [
                 'html' => $html,
@@ -89,6 +91,8 @@ class Jadwal extends CI_Controller
             $this->M_Jadwal->crudjadwal($typesend);
         } elseif ($typesend == 'editjadwal') {
             $data['jadwal'] =  $this->M_Jadwal->getbyid($this->input->post('id_jadwal'));
+            $data['mapel'] =  $this->M_Jadwal->get_mapel();
+            $data['status'] =  $this->M_Jadwal->get_status();
             $html = $this->load->view('jadwal/edit_jadwal', $data);
             $reponse = [
                 'html' => $html,
@@ -118,8 +122,8 @@ class Jadwal extends CI_Controller
 
             $validation = [
                 [
-                    'field' => 'hari_edit',
-                    'label' => 'Hari',
+                    'field' => 'mapel_edit',
+                    'label' => 'Mata Pelajaran',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
@@ -136,11 +140,24 @@ class Jadwal extends CI_Controller
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
+                [
+                    'field' => 'status_edit',
+                    'label' => 'Status',
+                    'rules' => 'trim|required|xss_clean',
+                    'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
+                ],
 
             ];
             $this->form_validation->set_rules($validation);
+            if ($this->input->post("mapel_edit") != $this->input->post("mapel_old")) {
+                $cek_jadwal = $this->M_Jadwal->cek_jadwal($this->input->post("mapel_edit"));
+            } else {
+                $cek_jadwal = 0;
+            }
             if ($this->form_validation->run() == FALSE) {
                 $reponse['messages'] = '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>';
+            } else if ($cek_jadwal != 0) {
+                $reponse['messages'] = '<div class="alert alert-danger" role="alert">Jadwal Mata Pelajaran <b>' . $this->input->post("mapel_edit") . '</b> sudah ada silahkan periksa kembali data yang diinput</div>';
             } else {
                 $this->M_Jadwal->crudjadwal($typesend);
                 $reponse = [

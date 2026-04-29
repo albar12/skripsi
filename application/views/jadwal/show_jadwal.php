@@ -2,25 +2,15 @@
 <input type="hidden" id="id_jadwal" , name="id_jadwal" value="<?php echo $jadwal['id_jadwal'] ?>">
 
 <div class="form-group row">
-    <label for="hari_edit" class="col-sm-4 col-form-label">Hari<font color="red">*</font></label>
+    <label for="mapel_edit" class="col-sm-4 col-form-label">Mata Pelajaran<font color="red">*</font></label>
     <div class="col-sm-8">
-        <select class="form-control form-control-sm" disabled name="hari_edit" id="hari_edit">
-            <option selected disabled value="">--Pilih Hari--</option>
-            <option value="Senin" <?php if ($jadwal['hari'] == "Senin") {
-                                        echo "selected";
-                                    } ?>>Senin</option>
-            <option value="Selasa" <?php if ($jadwal['hari'] == "Selasa") {
-                                        echo "selected";
-                                    } ?>>Selasa</option>
-            <option value="Rabu" <?php if ($jadwal['hari'] == "Rabu") {
-                                        echo "selected";
-                                    } ?>>Rabu</option>
-            <option value="Kamis" <?php if ($jadwal['hari'] == "Kamis") {
-                                        echo "selected";
-                                    } ?>>Kamis</option>
-            <option value="Jumat" <?php if ($jadwal['hari'] == "Jumat") {
-                                        echo "selected";
-                                    } ?>>Jumat</option>
+        <select class="form-control form-control-sm" disabled name="mapel_edit" id="mapel_edit">
+            <option selected disabled value="">--Pilih Mata Pelajaran--</option>
+            <?php foreach ($mapel->result() as $item) { ?>
+                <option value="<?php echo $item->id_mapel ?>" <?php if ($item->id_mapel == $jadwal['id_mapel']) {
+                                                                    echo "selected";
+                                                                } ?>><?php echo $item->nama_mapel ?></option>
+            <?php } ?>
         </select>
     </div>
 </div>
@@ -39,7 +29,20 @@
     </div>
 </div>
 
-<div class="my-2" id="info-edit"></div>
+<div class="form-group row">
+    <label for="status_edit" class="col-sm-4 col-form-label">Status<font color="red">*</font></label>
+    <div class="col-sm-8">
+        <select class="form-control form-control-sm" disabled name="status_edit" id="status_edit">
+            <option selected disabled value="">--Pilih Status--</option>
+            <?php foreach ($status->result() as $item) { ?>
+                <option value="<?php echo $item->id_status ?>" <?php if ($item->id_status == $jadwal['status']) {
+                                                                    echo "selected";
+                                                                } ?>><?php echo $item->nama_status ?></option>
+            <?php } ?>
+        </select>
+    </div>
+</div>
+
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal"><span class="fas fa-times mr-1"></span>Tutup</button>

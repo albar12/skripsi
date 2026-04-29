@@ -25,10 +25,14 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Hari</th>
+                            <th scope="col">Mata Pelajaran</th>
                             <th scope="col">Jam Mulai</th>
                             <th scope="col">Jam Selesai</th>
                             <th scope="col">Admin Input</th>
+                            <th scope="col">Tanggal Input</th>
+                            <th scope="col">Admin Update</th>
+                            <th scope="col">Tanggal Update</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -37,12 +41,25 @@
                         $no = 1;
                         foreach ($jadwal->result() as $r) {
                         ?>
+                            <?php
+                            if ($r->status == '1') {
+                                $status = '<span class="badge badge-success">' . $r->nama_status . '</span>';
+                            } else if ($r->status == '2') {
+                                $status = '<span class="badge badge-secondary">' . $r->nama_status . '</span>';
+                            } else {
+                                $status = '<span class="badge badge-danger">' . $r->nama_status . '</span>';
+                            }
+                            ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->hari ?></td>
+                                <td><?php echo $r->nama_mapel ?></td>
                                 <td><?php echo $r->jam_mulai ?></td>
                                 <td><?php echo $r->jam_selesai ?></td>
-                                <td><?php echo $r->nama_admin ?></td>
+                                <td><?php echo $r->admin_input ?></td>
+                                <td><?php echo $r->create_date ?></td>
+                                <td><?php echo $r->admin_update ?></td>
+                                <td><?php echo $r->update_date ?></td>
+                                <td><?php echo $status ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
                                         <button class="btn btn-xs btn-primary show-jadwal" title="Show Jadwal" data-jadwal-id="<?php echo $r->id_jadwal ?>"><span class="fas fa-eye"></span></button>
@@ -68,15 +85,13 @@
                     <?= form_open_multipart('#', ['id' => 'addjadwal']) ?>
 
                     <div class="form-group row">
-                        <label for="hari" class="col-sm-4 col-form-label">Hari<font color="red">*</font></label>
+                        <label for="mapel" class="col-sm-4 col-form-label">Mata Pelajaran<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <select class="form-control form-control-sm" name="hari" id="hari">
-                                <option selected disabled value="">--Pilih Hari--</option>
-                                <option value="Senin">Senin</option>
-                                <option value="Selasa">Selasa</option>
-                                <option value="Rabu">Rabu</option>
-                                <option value="Kamis">Kamis</option>
-                                <option value="Jumat">Jumat</option>
+                            <select class="form-control form-control-sm" name="mapel" id="mapel">
+                                <option selected disabled value="">--Pilih Mata Pelajaran--</option>
+                                <?php foreach ($mapel->result() as $item) { ?>
+                                    <option value="<?php echo $item->id_mapel ?>"><?php echo $item->nama_mapel ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>

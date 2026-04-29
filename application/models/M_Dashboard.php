@@ -34,10 +34,11 @@ class M_Dashboard extends CI_Model
         return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
 
-    public function count_guru()
+    public function count_pegawai()
     {
-        $this->db->select('nip');
-        $this->db->from('table_guru');
+        $this->db->select('id_user');
+        $this->db->from('table_user');
+        $this->db->where('status !=', '3');
         $query = $this->db->get();
 
         return $query->num_rows();
@@ -137,16 +138,19 @@ class M_Dashboard extends CI_Model
 
         $this->db->select('id_cuti');
         $this->db->from('table_cuti');
+        $this->db->where('status !=', '3');
         $query = $this->db->get();
 
         return $query->num_rows();
     }
 
 
-    public function get_jml_guru()
+    public function get_jml_pegawai()
     {
-        $this->db->select('*');
-        $this->db->from('table_guru');
+        $this->db->select('table_user.*, table_jabatan.nama_jabatan');
+        $this->db->from('table_user');
+        $this->db->join("table_jabatan", "table_jabatan.id_jabatan = table_user.jabatan");
+        $this->db->where('table_user.status !=', '3');
         $query = $this->db->get();
         return $query;
     }
@@ -163,9 +167,9 @@ class M_Dashboard extends CI_Model
             $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
         }
 
-        $this->db->select('table_absensi.*, table_guru.nama');
+        $this->db->select('table_absensi.*, table_user.nama');
         $this->db->from('table_absensi');
-        $this->db->join('table_guru', 'table_guru.nip = table_absensi.nip');
+        $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "Hadir");
         $query = $this->db->get();
 
@@ -184,9 +188,9 @@ class M_Dashboard extends CI_Model
             $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
         }
 
-        $this->db->select('table_absensi.*, table_guru.nama');
+        $this->db->select('table_absensi.*, table_user.nama');
         $this->db->from('table_absensi');
-        $this->db->join('table_guru', 'table_guru.nip = table_absensi.nip');
+        $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "izin");
         $query = $this->db->get();
 
@@ -205,9 +209,9 @@ class M_Dashboard extends CI_Model
             $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
         }
 
-        $this->db->select('table_absensi.*, table_guru.nama');
+        $this->db->select('table_absensi.*, table_user.nama');
         $this->db->from('table_absensi');
-        $this->db->join('table_guru', 'table_guru.nip = table_absensi.nip');
+        $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "Sakit");
         $query = $this->db->get();
 
@@ -226,9 +230,9 @@ class M_Dashboard extends CI_Model
             $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
         }
 
-        $this->db->select('table_absensi.*, table_guru.nama');
+        $this->db->select('table_absensi.*, table_user.nama');
         $this->db->from('table_absensi');
-        $this->db->join('table_guru', 'table_guru.nip = table_absensi.nip');
+        $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
         $this->db->where("table_absensi.status", "Alpha");
         $query = $this->db->get();
 
@@ -247,78 +251,11 @@ class M_Dashboard extends CI_Model
             $this->db->where("table_cuti.tanggal >= '$dash_tanggal_dari' AND table_cuti.tanggal <= '$dash_tanggal_sampai'");
         }
 
-        $this->db->select('table_cuti.*, table_guru.nama');
+        $this->db->select('table_cuti.*, table_user.nama');
         $this->db->from('table_cuti');
-        $this->db->join('table_guru', 'table_guru.nip = table_cuti.nip');
+        $this->db->join('table_user', 'table_user.id_user = table_cuti.id_user');
         $query = $this->db->get();
 
         return $query;
-    }
-
-    public function get_laporan()
-    {
-        $this->db->select('id_produk, nama_kategori, nama_produk');
-        $this->db->from("tb_produk");
-        $this->db->join("tb_kategori", "tb_kategori.id_kategori = tb_produk.id_kategori");
-        $this->db->where("tb_produk.id_status", '1');
-        $query = $this->db->get();
-        return $query;
-    }
-
-    public function get_stok_awal($id_produk, $dash_tanggal_dari)
-    {
-        $this->db->select("id_barang_masuk");
-        $this->db->from("tb_barang_masuk");
-        $this->db->where("id_produk", $id_produk);
-        $this->db->where("create_date < '$dash_tanggal_dari 00:00:00'");
-        $this->db->where("id_status", '1');
-        $query = $this->db->get();
-
-        return $query;
-    }
-
-    public function get_stok_masuk($id_produk, $dash_tanggal_dari, $dash_tanggal_sampai)
-    {
-        $this->db->select("id_barang_masuk");
-        $this->db->from("tb_barang_masuk");
-        $this->db->where("id_produk", $id_produk);
-        $this->db->where("create_date >= '$dash_tanggal_dari 00:00:00' AND create_date <= '$dash_tanggal_sampai 23:59:59'");
-        $this->db->where("id_status", '1');
-        $query = $this->db->get();
-
-        return $query;
-    }
-
-    public function get_stok_keluar($id_produk, $dash_tanggal_dari, $dash_tanggal_sampai)
-    {
-        $this->db->select("id_barang_keluar");
-        $this->db->from("tb_barang_keluar");
-        $this->db->where("id_produk", $id_produk);
-        $this->db->where("jumlah IS NULL");
-        $this->db->where("create_date >= '$dash_tanggal_dari 00:00:00' AND create_date <= '$dash_tanggal_sampai 23:59:59'");
-        $this->db->where("id_status", '1');
-        $query = $this->db->get();
-
-        return $query;
-    }
-
-    public function get_stok_so($id_produk, $dash_tanggal_dari, $dash_tanggal_sampai)
-    {
-        $this->db->select("id_barang_keluar,jumlah");
-        $this->db->from("tb_barang_keluar");
-        $this->db->where("id_produk", $id_produk);
-        $this->db->where("flag_so IS NOT NULL");
-        $this->db->where("create_date >= '$dash_tanggal_dari 00:00:00' AND create_date <= '$dash_tanggal_sampai 23:59:59'");
-        $this->db->where("id_status", '1');
-        $query = $this->db->get();
-
-        $jml = array();
-        foreach ($query->result() as $data) {
-            array_push($jml, $data->jumlah);
-        }
-
-        $jml_akhir = array_sum($jml);
-
-        return $jml_akhir;
     }
 }

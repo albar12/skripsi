@@ -43,17 +43,14 @@
 
         $('#login').submit(function(e) {
             e.preventDefault();
-            var username = $('#username').val();
+            var nip = $('#nip').val();
             var password = $('#password').val();
-            // console.log(password);
             var form = this;
             var formdata = new FormData(form);
             $.ajax({
                 url: "<?= base_url('index.php/login/cek_login'); ?>",
                 type: 'POST',
                 data: formdata,
-                // data: 'Username=' + username + '&Password=' + password,
-
                 processData: false,
                 contentType: false,
                 dataType: 'json',
@@ -86,7 +83,8 @@
                 <div id="info-data"></div>
 
                 <div class="input-group mb-3">
-                    <input type="text" name="username" id="username" class="form-control" placeholder="Username/NIP">
+                    <label for="username" class="col-sm-4 col-form-label">Nip/Email<font color="red">*</font></label>
+                    <input type="text" name="username" id="username" class="form-control" placeholder="NIP/Email">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -95,6 +93,7 @@
                 </div>
 
                 <div class="input-group mb-3">
+                    <label for="password" class="col-sm-4 col-form-label">Password<font color="red">*</font></label>
                     <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                     <div class="input-group-append">
                         <div class="input-group-text">

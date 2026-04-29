@@ -25,9 +25,9 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">NIP</th>
-                            <th scope="col">Guru</th>
-                            <th scope="col">Tanggal</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Tanggal Absen</th>
+                            <th scope="col">Jam Absen</th>
                             <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
@@ -38,9 +38,9 @@
                         foreach ($absensi->result() as $r) { ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
-                                <td><?php echo $r->nip ?></td>
                                 <td><?php echo $r->nama ?></td>
                                 <td><?php echo $r->tanggal ?></td>
+                                <td><?php echo $r->jam_absen ?></td>
                                 <?php
                                 if ($r->status == "Hadir") {
                                     $color = "success";
@@ -56,8 +56,8 @@
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
                                         <button class="btn btn-xs btn-primary show-absensi" title="Detail Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-eye"></span></button>
-                                        <button class="btn btn-xs btn-warning edit-absensi" title="Edit Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-absensi" title="Hapus Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-trash"></span></button>
+                                        <!-- <button class="btn btn-xs btn-warning edit-absensi" title="Edit Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-absensi" title="Hapus Absensi" data-absensi-id="<?php echo $r->id_absensi ?>"><span class="fas fa-trash"></span></button> -->
                                     </div>
                                 </td>
                             </tr>
@@ -77,12 +77,12 @@
                 <div class="modal-body">
                     <?= form_open_multipart('#', ['id' => 'addabsensi']) ?>
                     <div class="form-group row">
-                        <label for="guru" class="col-sm-4 col-form-label">Guru<font color="red">*</font></label>
+                        <label for="user" class="col-sm-4 col-form-label">Pegawai<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <select class="form-control form-control-sm" name="guru" id="guru">
-                                <option selected disabled value="">--Pilih Guru--</option>
-                                <?php foreach ($guru->result() as $item) { ?>
-                                    <option value="<?php echo $item->nip ?>"><?php echo $item->nama ?></option>
+                            <select class="form-control form-control-sm" name="user" id="user">
+                                <option selected disabled value="">--Pilih Pegawai--</option>
+                                <?php foreach ($user->result() as $item) { ?>
+                                    <option value="<?php echo $item->id_user ?>"><?php echo $item->nama ?></option>
                                 <?php  } ?>
 
                             </select>
@@ -97,6 +97,13 @@
                     </div>
 
                     <div class="form-group row">
+                        <label for="jam_absen" class="col-sm-4 col-form-label">Jam<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="time" class="form-control form-control-sm" name="jam_absen" id="jam_absen" readonly value="<?php echo date("H:i:s") ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label for="status" class="col-sm-4 col-form-label">Status<font color="red">*</font></label>
                         <div class="col-sm-8">
                             <select class="form-control form-control-sm" name="status" id="status">
@@ -104,7 +111,6 @@
                                 <option value="Hadir">Hadir</option>
                                 <option value="Izin">Izin</option>
                                 <option value="Sakit">Sakit</option>
-                                <option value="Alpha">Alpha</option>
                             </select>
                         </div>
                     </div>

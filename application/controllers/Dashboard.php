@@ -20,7 +20,7 @@ class Dashboard extends CI_Controller
     {
         $data = [
             'title' => 'Dashboard',
-            'jml_guru' => $this->M_Dashboard->count_guru(),
+            'jml_pegawai' => $this->M_Dashboard->count_pegawai(),
             'jml_hadir' => $this->M_Dashboard->count_hadir(),
             'jml_izin' => $this->M_Dashboard->count_izin(),
             'jml_sakit' => $this->M_Dashboard->count_sakit(),
@@ -54,14 +54,14 @@ class Dashboard extends CI_Controller
         $length = intval($this->input->get("length"));
         $data = [];
         if ($datatype == 'jml_guru') {
-            $query = $this->M_Dashboard->get_jml_guru();
+            $query = $this->M_Dashboard->get_jml_pegawai();
             foreach ($query->result() as $r) {
                 $data[] = [
                     $no++,
                     $r->nip,
                     $r->nama,
                     $r->jk,
-                    $r->jabatan,
+                    $r->nama_jabatan,
                 ];
             }
 
@@ -73,7 +73,6 @@ class Dashboard extends CI_Controller
             );
         } elseif ($datatype == 'jml_hadir') {
             $query = $this->M_Dashboard->get_jml_hadir();
-            // $query = $this->db->get("tb_kodepos");
             foreach ($query->result() as $r) {
                 $status = '<span class="badge badge-success">' . $r->status . '</span>';
                 $data[] = [

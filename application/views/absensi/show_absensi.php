@@ -1,14 +1,14 @@
 <?= form_open_multipart('#', ['id' => 'editabsensi']) ?>
 <input type="hidden" name="id_absensi" id="id_absensi" value="<?php echo $absensi['id_absensi'] ?>">
 <div class="form-group row">
-    <label for="guru_edit" class="col-sm-4 col-form-label">Guru<font color="red">*</font></label>
+    <label for="user_edit" class="col-sm-4 col-form-label">Pegawai<font color="red">*</font></label>
     <div class="col-sm-8">
-        <select class="form-control form-control-sm" disabled name="guru_edit" id="guru_edit">
+        <select class="form-control form-control-sm" disabled name="user_edit" id="user_edit">
             <option selected disabled value="">--Pilih Guru--</option>
-            <?php foreach ($guru->result() as $item) { ?>
-                <option value="<?php echo $item->nip ?>" <?php if ($item->nip == $absensi['nip']) {
-                                                                echo "selected";
-                                                            } ?>><?php echo $item->nama ?></option>
+            <?php foreach ($user->result() as $item) { ?>
+                <option value="<?php echo $item->id_user ?>" <?php if ($item->id_user == $absensi['id_user']) {
+                                                                    echo "selected";
+                                                                } ?>><?php echo $item->nama ?></option>
             <?php  } ?>
 
         </select>
@@ -19,6 +19,13 @@
     <label for="tanggal_edit" class="col-sm-4 col-form-label">Tanggal<font color="red">*</font></label>
     <div class="col-sm-8">
         <input type="date" class="form-control form-control-sm" disabled name="tanggal_edit" id="tanggal_edit" readonly value="<?php echo $absensi['tanggal'] ?>">
+    </div>
+</div>
+
+<div class="form-group row">
+    <label for="jam_absen_edit" class="col-sm-4 col-form-label">Jam<font color="red">*</font></label>
+    <div class="col-sm-8">
+        <input type="time" class="form-control form-control-sm" disabled name="jam_absen_edit" id="jam_absen_edit" readonly value="<?php echo $absensi['jam_absen'] ?>">
     </div>
 </div>
 
@@ -43,7 +50,6 @@
     </div>
 </div>
 
-<div class="my-2" id="edit-data"></div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal"><span class="fas fa-times mr-1"></span>Tutup</button>

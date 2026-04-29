@@ -15,7 +15,7 @@ class Cuti extends CI_Controller
         $data = [
             'title' => 'Data Cuti',
             'cuti' => $this->M_Cuti->get_cuti(),
-            'guru' => $this->M_Cuti->get_guru(),
+            'user' => $this->M_Cuti->get_user(),
         ];
         $this->load->view('layout/helper_login', $data);
         $this->load->view('layout/header', $data);
@@ -43,8 +43,8 @@ class Cuti extends CI_Controller
 
             $validation = [
                 [
-                    'field' => 'guru',
-                    'label' => 'Guru',
+                    'field' => 'user',
+                    'label' => 'Pegawai',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
@@ -70,7 +70,7 @@ class Cuti extends CI_Controller
 
             ];
             $this->form_validation->set_rules($validation);
-            $cek_cuti = $this->M_Cuti->cek_cuti($this->input->post("guru"), $this->input->post("tanggal"));
+            $cek_cuti = $this->M_Cuti->cek_cuti($this->input->post("user"), $this->input->post("tanggal"));
             if ($this->form_validation->run() == FALSE) {
                 $reponse['messages'] = '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>';
             } else if ($cek_cuti != 0) {
@@ -85,7 +85,7 @@ class Cuti extends CI_Controller
             }
         } elseif ($typesend == 'showcuti') {
             $data['cuti'] =  $this->M_Cuti->getbyid($this->input->post("id_cuti"));
-            $data['guru'] =  $this->M_Cuti->get_guru();
+            $data['user'] =  $this->M_Cuti->get_user();
             $html = $this->load->view('cuti/show_cuti', $data);
             $reponse = [
                 'html' => $html,
@@ -97,7 +97,7 @@ class Cuti extends CI_Controller
             $this->M_Cuti->crudcuti($typesend);
         } elseif ($typesend == 'editcuti') {
             $data['cuti'] =  $this->M_Cuti->getbyid($this->input->post("id_cuti"));
-            $data['guru'] =  $this->M_Cuti->get_guru();
+            $data['user'] =  $this->M_Cuti->get_user();
             $html = $this->load->view('cuti/edit_cuti', $data);
             $reponse = [
                 'html' => $html,
@@ -106,7 +106,7 @@ class Cuti extends CI_Controller
             ];
         } elseif ($typesend == 'approvecuti') {
             $data['cuti'] =  $this->M_Cuti->getbyid($this->input->post("id_cuti"));
-            $data['guru'] =  $this->M_Cuti->get_guru();
+            $data['user'] =  $this->M_Cuti->get_user();
             $html = $this->load->view('cuti/approve_cuti', $data);
             $reponse = [
                 'html' => $html,
@@ -136,8 +136,8 @@ class Cuti extends CI_Controller
 
             $validation = [
                 [
-                    'field' => 'guru_edit',
-                    'label' => 'Guru',
+                    'field' => 'user_edit',
+                    'label' => 'Pegawai',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],

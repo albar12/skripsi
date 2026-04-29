@@ -8,6 +8,20 @@
     </div>
 </div>
 
+<div class="form-group row">
+    <label for="status_edit" class="col-sm-4 col-form-label">Status<font color="red">*</font></label>
+    <div class="col-sm-8">
+        <select class="form-control form-control-sm" name="status_edit" id="status_edit">
+            <option selected disabled value="">--Pilih Status--</option>
+            <?php foreach ($status->result() as $item) { ?>
+                <option value="<?php echo $item->id_status ?>" <?php if ($item->id_status == $mapel['status']) {
+                                                                    echo "selected";
+                                                                } ?>><?php echo $item->nama_status ?></option>
+            <?php  } ?>
+        </select>
+    </div>
+</div>
+
 <div class="my-2" id="info-edit">
 </div>
 </div>

@@ -27,6 +27,10 @@
                             <th scope="col">No</th>
                             <th scope="col">Mata Pelajaran</th>
                             <th scope="col">Admin Input</th>
+                            <th scope="col">Tanggal Input</th>
+                            <th scope="col">Admin Update</th>
+                            <th scope="col">Tanggal Update</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -35,10 +39,23 @@
                         $no = 1;
                         foreach ($mapel->result() as $r) {
                         ?>
+                            <?php
+                            if ($r->status == '1') {
+                                $status = '<span class="badge badge-success">' . $r->nama_status . '</span>';
+                            } else if ($r->status == '2') {
+                                $status = '<span class="badge badge-secondary">' . $r->nama_status . '</span>';
+                            } else {
+                                $status = '<span class="badge badge-danger">' . $r->nama_status . '</span>';
+                            }
+                            ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
                                 <td><?php echo $r->nama_mapel ?></td>
-                                <td><?php echo $r->nama_admin ?></td>
+                                <td><?php echo $r->admin_input ?></td>
+                                <td><?php echo $r->create_date ?></td>
+                                <td><?php echo $r->admin_update ?></td>
+                                <td><?php echo $r->update_date ?></td>
+                                <td><?php echo $status ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
                                         <button class="btn btn-xs btn-primary show-mapel" title="Show Mapel" data-mapel-id="<?php echo $r->id_mapel ?>"><span class="fas fa-eye"></span></button>

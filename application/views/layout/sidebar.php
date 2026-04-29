@@ -16,8 +16,10 @@
 
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-                <?php if ($this->session->userdata('posisi') == 'Admin') : ?>
+                <div class="info">
+                    <div class="d-block text-white">Menu</div>
+                </div>
+                <?php if ($this->session->userdata('jabatan') == '1' || $this->session->userdata('jabatan') == '2') : ?>
                     <li class="nav-item">
                         <a href="<?php echo base_url('index.php/dashboard/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'dashboard') {
                                                                                                             echo 'active';
@@ -32,26 +34,11 @@
                                                                                                         echo 'active';
                                                                                                     } ?>">
                             <i class="nav-icon fas fa-edit"></i>
-                            Guru
+                            Pegawai
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/kepalasekolah/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'kepalasekolah') {
-                                                                                                                echo 'active';
-                                                                                                            } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Kepala Sekolah
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/admin/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'admin') {
-                                                                                                        echo 'active';
-                                                                                                    } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Admin
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a href="<?php echo base_url('index.php/absensi/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'absensi') {
                                                                                                         echo 'active';
@@ -84,72 +71,41 @@
                             Jadwal
                         </a>
                     </li>
-                <?php elseif ($this->session->userdata('posisi') == '2') : ?>
+                    <div class="info">
+                        <div class="d-block text-white">Setting</div>
+                    </div>
                     <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/dashboard/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'dashboard') {
-                                                                                                            echo 'active';
-                                                                                                        } ?>">
+                        <a href="<?php echo base_url('index.php/jabatan/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'jabatan') {
+                                                                                                        echo 'active';
+                                                                                                    } ?>">
                             <i class="nav-icon fas fa-edit"></i>
-                            Dashboard
+                            Jabatan
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="<?php echo base_url('index.php/agama/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'agama') {
+                                                                                                        echo 'active';
+                                                                                                    } ?>">
+                            <i class="nav-icon fas fa-edit"></i>
+                            Agama
+                        </a>
+                    </li>
+                <?php else : ?>
 
                     <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/user/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'user') {
+                        <a href="<?php echo base_url('index.php/absensi/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'absensi') {
                                                                                                         echo 'active';
                                                                                                     } ?>">
                             <i class="nav-icon fas fa-edit"></i>
-                            User
-                        </a>
-                    </li>
-                <?php elseif ($this->session->userdata('posisi') == '3') : ?>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/pelanggan/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'pelanggan') {
-                                                                                                            echo 'active';
-                                                                                                        } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Pelanggan
+                            Absensi
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/supplier/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'supplier') {
-                                                                                                            echo 'active';
-                                                                                                        } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Supplier
-                        </a>
-                    </li>
-                <?php elseif ($this->session->userdata('posisi') == '4') : ?>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/kategori/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'kategori') {
-                                                                                                            echo 'active';
-                                                                                                        } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Kategori
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/produk/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'produk') {
+                        <a href="<?php echo base_url('index.php/cuti/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'cuti') {
                                                                                                         echo 'active';
                                                                                                     } ?>">
                             <i class="nav-icon fas fa-edit"></i>
-                            Produk
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/barangmasuk/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'barangmasuk') {
-                                                                                                            echo 'active';
-                                                                                                        } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Barang Masuk
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<?php echo base_url('index.php/barangkeluar/index') ?>" class="nav-link <?php if ($this->uri->segment("1") == 'barangkeluar') {
-                                                                                                                echo 'active';
-                                                                                                            } ?>">
-                            <i class="nav-icon fas fa-edit"></i>
-                            Barang Keluar
+                            Cuti
                         </a>
                     </li>
                 <?php endif; ?>

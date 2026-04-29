@@ -65,6 +65,7 @@ class Mapel extends CI_Controller
             }
         } elseif ($typesend == 'showmapel') {
             $data['mapel'] = $this->M_Mapel->getbyid($this->input->post("id_mapel"));
+            $data['status'] = $this->M_Mapel->get_status();
             $html = $this->load->view('mapel/show_mapel', $data);
             $reponse = [
                 'html' => $html,
@@ -76,6 +77,7 @@ class Mapel extends CI_Controller
             $this->M_Mapel->crudmapel($typesend);
         } elseif ($typesend == 'editmapel') {
             $data['mapel'] = $this->M_Mapel->getbyid($this->input->post("id_mapel"));
+            $data['status'] = $this->M_Mapel->get_status();
             $html = $this->load->view('mapel/edit_mapel', $data);
             $reponse = [
                 'html' => $html,
@@ -107,6 +109,12 @@ class Mapel extends CI_Controller
                 [
                     'field' => 'mapel_edit',
                     'label' => 'Nama Mata Pelajaran',
+                    'rules' => 'trim|required|xss_clean',
+                    'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
+                ],
+                [
+                    'field' => 'status_edit',
+                    'label' => 'Status',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],

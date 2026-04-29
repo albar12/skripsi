@@ -28,8 +28,8 @@
                         <a href="#jml_guru_tab" onclick="showjmlguru()">
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3 id="jml_guru"><?php echo $jml_guru ?></h3>
-                                    <p>Jumlah Guru</p>
+                                    <h3 id="jml_guru"><?php echo $jml_pegawai ?></h3>
+                                    <p>Jumlah Pegawai</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-stalker""></i>
@@ -85,7 +85,7 @@
                     </div>
                 </a>
             </div>
-
+            <!-- 
             <div class="col-lg-3 col-6">
                 <a href="#jml_alpha_tab" onclick="showjmlalpha()">
                     <div class="small-box bg-warning">
@@ -96,10 +96,9 @@
                         <div class="icon">
                             <i class="ion ion-close-circled"></i>
                         </div>
-                        <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
                     </div>
                 </a>
-            </div>
+            </div> -->
 
             <div class="col-lg-3 col-6">
                 <a href="#jml_cuti_tab" onclick="showcuti()">
@@ -319,12 +318,16 @@
         let table_jml_izin = new DataTable('#lap_jml_izin', {
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_izin'); ?>",
-                type: 'get',
+                type: 'post',
                 async: true,
                 "processing": true,
                 "serverSide": true,
                 dataType: 'json',
-                "bDestroy": true
+                "bDestroy": true,
+                data: function(data) {
+                    data.dash_tanggal_dari = $('#dash_tanggal_dari').val();
+                    data.dash_tanggal_sampai = $('#dash_tanggal_sampai').val();
+                }
             },
             rowCallback: function(row, data, iDisplayIndex) {
                 $('td:eq(0)', row).html();
@@ -334,12 +337,16 @@
         let table_jml_sakit = new DataTable('#lap_jml_sakit', {
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_sakit'); ?>",
-                type: 'get',
+                type: 'post',
                 async: true,
                 "processing": true,
                 "serverSide": true,
                 dataType: 'json',
-                "bDestroy": true
+                "bDestroy": true,
+                data: function(data) {
+                    data.dash_tanggal_dari = $('#dash_tanggal_dari').val();
+                    data.dash_tanggal_sampai = $('#dash_tanggal_sampai').val();
+                }
             },
             rowCallback: function(row, data, iDisplayIndex) {
                 $('td:eq(0)', row).html();
@@ -349,12 +356,16 @@
         let table_jml_alpha = new DataTable('#lap_jml_alpha', {
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_alpha'); ?>",
-                type: 'get',
+                type: 'post',
                 async: true,
                 "processing": true,
                 "serverSide": true,
                 dataType: 'json',
-                "bDestroy": true
+                "bDestroy": true,
+                data: function(data) {
+                    data.dash_tanggal_dari = $('#dash_tanggal_dari').val();
+                    data.dash_tanggal_sampai = $('#dash_tanggal_sampai').val();
+                }
             },
             rowCallback: function(row, data, iDisplayIndex) {
                 $('td:eq(0)', row).html();
@@ -364,12 +375,16 @@
         let table_jml_cuti = new DataTable('#lap_jml_cuti', {
             "ajax": {
                 url: "<?= base_url('dashboard/get_datatbl?type=jml_cuti'); ?>",
-                type: 'get',
+                type: 'post',
                 async: true,
                 "processing": true,
                 "serverSide": true,
                 dataType: 'json',
-                "bDestroy": true
+                "bDestroy": true,
+                data: function(data) {
+                    data.dash_tanggal_dari = $('#dash_tanggal_dari').val();
+                    data.dash_tanggal_sampai = $('#dash_tanggal_sampai').val();
+                }
             },
             rowCallback: function(row, data, iDisplayIndex) {
                 $('td:eq(0)', row).html();
@@ -383,6 +398,7 @@
             table_jml_izin.ajax.reload();
             table_jml_sakit.ajax.reload();
             table_jml_alpha.ajax.reload();
+            table_jml_cuti.ajax.reload();
 
             var dash_tanggal_dari = $('#dash_tanggal_dari').val();
             var dash_tanggal_sampai = $('#dash_tanggal_sampai').val();

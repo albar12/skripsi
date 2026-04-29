@@ -29,6 +29,10 @@
                             <th scope="col">Tanggal</th>
                             <th scope="col">Waktu</th>
                             <th scope="col">Alasan</th>
+                            <th scope="col">Admin Input</th>
+                            <th scope="col">Tanggal Input</th>
+                            <th scope="col">Admin Update</th>
+                            <th scope="col">Tanggal Update</th>
                             <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
@@ -38,12 +42,12 @@
                         $no = 1;
                         foreach ($cuti->result() as $r) { ?>
                             <?php
-                            if ($r->status == '') {
+                            if ($r->status_approval == '') {
                                 $status = '<span class="badge badge-primary">Pengajuan</span>';
-                            } else if ($r->status == 'Approve') {
-                                $status = '<span class="badge badge-success">' . $r->status . '</span>';
+                            } else if ($r->status_approval == 'Approve') {
+                                $status = '<span class="badge badge-success">' . $r->status_approval . '</span>';
                             } else {
-                                $status = '<span class="badge badge-danger">' . $r->status . '</span>';
+                                $status = '<span class="badge badge-danger">' . $r->status_approval . '</span>';
                             }
                             ?>
                             <tr>
@@ -52,15 +56,22 @@
                                 <td><?php echo $r->tanggal ?></td>
                                 <td><?php echo $r->waktu . " Hari" ?></td>
                                 <td><?php echo $r->alasan ?></td>
+                                <td><?php echo $r->admin_input ?></td>
+                                <td><?php echo $r->create_date ?></td>
+                                <td><?php echo $r->admin_update ?></td>
+                                <td><?php echo $r->update_date ?></td>
                                 <td><?php echo $status ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
                                         <button class="btn btn-xs btn-primary show-cuti" title="Show Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-eye"></span></button>
-                                        <?php if (!$r->status) { ?>
-                                            <button class="btn btn-xs btn-warning edit-cuti" title="Edit Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-edit"></span></button>
-                                            <button class="btn btn-xs btn-success approve-cuti" title="Approve Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-check"></span></button>
-                                            <button class="btn btn-xs btn-danger delete-cuti" title="Hapus Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-trash"></span></button>
-
+                                        <?php if (!$r->status_approval) { ?>
+                                            <?php if ($r->id_user == $this->session->userdata("id_user")) { ?>
+                                                <button class="btn btn-xs btn-warning edit-cuti" title="Edit Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-edit"></span></button>
+                                                <button class="btn btn-xs btn-danger delete-cuti" title="Hapus Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-trash"></span></button>
+                                            <?php } ?>
+                                            <?php if ($this->session->userdata("jabatan") == "1" || $this->session->userdata("jabatan") == "2") { ?>
+                                                <button class="btn btn-xs btn-success approve-cuti" title="Approve Cuti" data-cuti-id="<?php echo $r->id_cuti ?>"><span class="fas fa-check"></span></button>
+                                            <?php } ?>
                                         <?php } ?>
                                     </div>
                                 </td>
@@ -81,16 +92,19 @@
                 <div class="modal-body">
                     <?= form_open_multipart('#', ['id' => 'addcuti']) ?>
                     <div class="form-group row">
-                        <label for="guru" class="col-sm-4 col-form-label">Guru<font color="red">*</font></label>
+                        <label for="user_data" class="col-sm-4 col-form-label">Pegawai<font color="red">*</font></label>
                         <div class="col-sm-8">
-                            <select class="form-control form-control-sm" name="guru" id="guru">
-                                <option selected disabled value="">--Pilih Guru--</option>
-                                <?php foreach ($guru->result() as $item) { ?>
-                                    <option value="<?php echo $item->nip ?>"><?php echo $item->nama ?></option>
+                            <select class="form-control form-control-sm" disabled name="user_data" id="user_data">
+                                <option selected disabled value="">--Pilih Pegawai--</option>
+                                <?php foreach ($user->result() as $item) { ?>
+                                    <option value="<?php echo $item->id_user ?>" <?php if ($item->id_user == $this->session->userdata("id_user")) {
+                                                                                        echo "selected";
+                                                                                    } ?>><?php echo $item->nama ?></option>
                                 <?php  } ?>
 
                             </select>
                         </div>
+                        <input type="hidden" id="user" name="user" value="<?php echo $this->session->userdata("id_user") ?>">
                     </div>
 
                     <div class="form-group row">

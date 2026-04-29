@@ -15,7 +15,7 @@ class Absensi extends CI_Controller
         $data = [
             'title' => 'Data Absensi',
             'absensi' => $this->M_Absensi->get_absensi(),
-            'guru' => $this->M_Absensi->get_guru()
+            'user' => $this->M_Absensi->get_user()
         ];
         $this->load->view('layout/helper_login', $data);
         $this->load->view('layout/header', $data);
@@ -43,8 +43,8 @@ class Absensi extends CI_Controller
 
             $validation = [
                 [
-                    'field' => 'guru',
-                    'label' => 'Guru',
+                    'field' => 'user',
+                    'label' => 'Pegawai',
                     'rules' => 'trim|required|xss_clean',
                     'errors' => ['required' => '%s Tidak Boleh Kosong', 'xss_clean' => 'Please check your form on %s.']
                 ],
@@ -57,7 +57,7 @@ class Absensi extends CI_Controller
 
             ];
             $this->form_validation->set_rules($validation);
-            $cek_absensi = $this->M_Absensi->cek_absensi($this->input->post("guru"), $this->input->post("tanggal"));
+            $cek_absensi = $this->M_Absensi->cek_absensi($this->input->post("user"), $this->input->post("tanggal"));
 
             if ($this->form_validation->run() == FALSE) {
                 $reponse['messages'] = '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>';
@@ -73,7 +73,7 @@ class Absensi extends CI_Controller
             }
         } elseif ($typesend == 'showabsensi') {
             $data['absensi'] =  $this->M_Absensi->getbyid($this->input->post('id_absensi'));
-            $data['guru'] = $this->M_Absensi->get_guru();
+            $data['user'] = $this->M_Absensi->get_user();
             $html = $this->load->view('absensi/show_absensi', $data);
             $reponse = [
                 'html' => $html,

@@ -29,8 +29,14 @@
                             <th scope="col">No</th>
                             <th scope="col">NIP</th>
                             <th scope="col">Nama</th>
+                            <th scope="col">Email</th>
                             <th scope="col">Jenis Kelamin</th>
                             <th scope="col">Jabatan</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Admin Input</th>
+                            <th scope="col">Tanggal Input</th>
+                            <th scope="col">Admin Update</th>
+                            <th scope="col">Tanggal Update</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -38,17 +44,32 @@
                         <?php
                         $no = 1;
                         foreach ($guru->result() as $r) { ?>
+                            <?php
+                            if ($r->status == '1') {
+                                $status = '<span class="badge badge-success">' . $r->nama_status . '</span>';
+                            } else if ($r->status == '2') {
+                                $status = '<span class="badge badge-secondary">' . $r->nama_status . '</span>';
+                            } else {
+                                $status = '<span class="badge badge-danger">' . $r->nama_status . '</span>';
+                            }
+                            ?>
                             <tr>
                                 <td><?php echo $no++ ?></td>
                                 <td><?php echo $r->nip ?></td>
                                 <td><?php echo $r->nama ?></td>
+                                <td><?php echo $r->email ?></td>
                                 <td><?php echo $r->jk ?></td>
-                                <td><?php echo $r->jabatan ?></td>
+                                <td><?php echo $r->nama_jabatan ?></td>
+                                <td><?php echo $status ?></td>
+                                <td><?php echo $r->admin_input ?></td>
+                                <td><?php echo $r->create_date ?></td>
+                                <td><?php echo $r->admin_update ?></td>
+                                <td><?php echo $r->update_date ?></td>
                                 <td>
                                     <div class="btn-group btn-small " style="text-align: right;">
-                                        <button class="btn btn-xs btn-primary show-guru" title="Show Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-eye"></span></button>
-                                        <button class="btn btn-xs btn-warning edit-guru" title="Edit Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-user-edit"></span></button>
-                                        <button class="btn btn-xs btn-danger delete-guru" title="Hapus Guru" data-guru-id="<?php echo $r->nip ?>"><span class="fas fa-trash"></span></button>
+                                        <button class="btn btn-xs btn-primary show-guru" title="Show Guru" data-guru-id="<?php echo $r->id_user ?>"><span class="fas fa-eye"></span></button>
+                                        <button class="btn btn-xs btn-warning edit-guru" title="Edit Guru" data-guru-id="<?php echo $r->id_user ?>"><span class="fas fa-user-edit"></span></button>
+                                        <button class="btn btn-xs btn-danger delete-guru" title="Hapus Guru" data-guru-id="<?php echo $r->id_user ?>"><span class="fas fa-trash"></span></button>
                                     </div>
                                 </td>
                             </tr>
@@ -92,10 +113,9 @@
                         <div class="col-sm-8">
                             <select class="form-control form-control-sm" name="jabatan" id="jabatan">
                                 <option selected disabled value="">--Pilih Jabatan--</option>
-                                <option value="Wali Kelas">Wali Kelas</option>
-                                <option value="Guru Penjas">Guru Penjas</option>
-                                <option value="Guru Bhs Inggris">Guru Bhs Inggris</option>
-                                <option value="Guru Agama">Guru Agama</option>
+                                <?php foreach ($jabatan->result() as $r) { ?>
+                                    <option value="<?php echo $r->id_jabatan ?>"><?php echo $r->nama_jabatan ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -104,6 +124,21 @@
                         <label for="nomor_hp" class="col-sm-4 col-form-label">Nomor Handphone<font color="red">*</font></label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control form-control-sm" name="nomor_hp" id="nomor_hp">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="email" class="col-sm-4 col-form-label">Email<font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control form-control-sm" name="email" id="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-4 col-form-label">Password <font color="red">*</font></label>
+                        <div class="col-sm-8">
+                            <input type="password" class="form-control form-control-sm" min="5" max="8" name="password" id="password">
+                            <input type="checkbox" onclick="togglePassword()"> Show Password
                         </div>
                     </div>
 
@@ -119,10 +154,9 @@
                         <div class="col-sm-8">
                             <select class="form-control form-control-sm" name="agama" id="agama">
                                 <option selected disabled value="">--Pilih Agama--</option>
-                                <option value="Islam">Islam</option>
-                                <option value="Kristen">Kristen</option>
-                                <option value="Hindu">Hindu</option>
-                                <option value="Budha">Budha</option>
+                                <?php foreach ($agama->result() as $r) { ?>
+                                    <option value="<?php echo $r->id_agama ?>"><?php echo $r->nama_agama ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -181,6 +215,26 @@
 
 <script src="<?php echo base_url('assets/plugins') ?>/toastr/toastr.min.js"></script>
 <script>
+    function togglePassword() {
+        var input = document.getElementById("password");
+
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+
+    function togglePasswordedit() {
+        var input = document.getElementById("password_edit");
+
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+
     $(document).ready(function() {
 
         let table = new DataTable('#guru');
@@ -239,8 +293,8 @@
 
         $("#guru").on('click', '.delete-guru', function(e) {
             e.preventDefault();
-            var nip = $(e.currentTarget).attr('data-guru-id');
-            if (nip === '') return;
+            var id_user = $(e.currentTarget).attr('data-guru-id');
+            if (id_user === '') return;
             Swal.fire({
                 title: 'Hapus Data Ini?',
                 text: "Apakah Anda Akan Menghapus Data Ini?",
@@ -255,7 +309,7 @@
                         type: "POST",
                         url: '<?= base_url('index.php/guru/dataguru?type=delguru'); ?>',
                         data: {
-                            nip: nip
+                            id_user: id_user
                         },
                         beforeSend: function() {
                             swal.fire({
@@ -296,13 +350,13 @@
 
         $("#guru").on('click', '.show-guru', function(e) {
             e.preventDefault();
-            var nip = $(e.currentTarget).attr('data-guru-id');
-            if (nip === '') return;
+            var id_user = $(e.currentTarget).attr('data-guru-id');
+            if (id_user === '') return;
             $.ajax({
                 type: "POST",
                 url: '<?= base_url('index.php/guru/dataguru?type=showguru'); ?>',
                 data: {
-                    nip: nip
+                    id_user: id_user
                 },
                 beforeSend: function() {
                     swal.fire({
@@ -326,13 +380,13 @@
 
         $("#guru").on('click', '.edit-guru', function(e) {
             e.preventDefault();
-            var nip = $(e.currentTarget).attr('data-guru-id');
-            if (nip === '') return;
+            var id_user = $(e.currentTarget).attr('data-guru-id');
+            if (id_user === '') return;
             $.ajax({
                 type: "POST",
                 url: '<?= base_url('index.php/guru/dataguru?type=editguru'); ?>',
                 data: {
-                    nip: nip
+                    id_user: id_user
                 },
                 beforeSend: function() {
                     swal.fire({

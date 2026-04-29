@@ -2,17 +2,17 @@
 <input type="hidden" name="id_cuti" id="id_cuti" value="<?php echo $cuti['id_cuti'] ?>">
 
 <div class="form-group row">
-    <label for="guru_edit" class="col-sm-4 col-form-label">Guru<font color="red">*</font></label>
+    <label for="user_data_edit" class="col-sm-4 col-form-label">Pegawai<font color="red">*</font></label>
     <div class="col-sm-8">
-        <select class="form-control form-control-sm" name="guru_edit" id="guru_edit">
-            <option selected disabled value="">--Pilih Guru--</option>
-            <?php foreach ($guru->result() as $item) { ?>
-                <option value="<?php echo $item->nip ?>" <?php if ($item->nip == $cuti['nip']) {
-                                                                echo "selected";
-                                                            } ?>><?php echo $item->nama ?></option>
+        <select class="form-control form-control-sm" disabled name="user_data_edit" id="user_data_edit">
+            <option selected disabled value="">--Pilih Pegawai--</option>
+            <?php foreach ($user->result() as $item) { ?>
+                <option value="<?php echo $item->id_user ?>" <?php if ($item->id_user == $cuti['id_user']) {
+                                                                    echo "selected";
+                                                                } ?>><?php echo $item->nama ?></option>
             <?php  } ?>
-
         </select>
+        <input type="hidden" id="user_edit" name="user_edit" value="<?php echo $this->session->userdata("id_user") ?>">
     </div>
 </div>
 
@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="my-2" id="edit-data">
+<div class="my-2" id="info-edit">
 </div>
 </div>
 <div class="modal-footer">
