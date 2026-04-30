@@ -199,9 +199,10 @@
 <script>
     $(document).ready(function() {
 
-        let table = $('#cuti').DataTable({
+        let table = new DataTable('#cuti', {
             responsive: true,
-            autoWidth: false
+            autoWidth: false,
+
         });
 
 

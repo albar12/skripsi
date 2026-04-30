@@ -146,11 +146,11 @@
 <script>
     $(document).ready(function() {
 
-        let table = $('#kepala_sekolah').DataTable({
+        let table = new DataTable('#kepala_sekolah', {
             responsive: true,
-            autoWidth: false
-        });
+            autoWidth: false,
 
+        });
 
 
         $('#addjabatan').submit(function(e) {

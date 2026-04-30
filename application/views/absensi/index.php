@@ -174,9 +174,10 @@
 <script>
     $(document).ready(function() {
 
-        let table = $('#absensi').DataTable({
+        let table = new DataTable('#absensi', {
             responsive: true,
-            autoWidth: false
+            autoWidth: false,
+
         });
 
 

@@ -145,9 +145,10 @@
 <script>
     $(document).ready(function() {
 
-        let table = $('#agama').DataTable({
+        let table = new DataTable('#agama', {
             responsive: true,
-            autoWidth: false
+            autoWidth: false,
+
         });
 
         $('#addagama').submit(function(e) {

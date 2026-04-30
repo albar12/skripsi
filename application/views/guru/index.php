@@ -239,11 +239,11 @@
 
     $(document).ready(function() {
 
-        let table = $('#guru').DataTable({
+        let table = new DataTable('#guru', {
             responsive: true,
-            autoWidth: false
-        });
+            autoWidth: false,
 
+        });
 
         $('#addguru').submit(function(e) {
             e.preventDefault();

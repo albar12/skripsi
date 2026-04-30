@@ -168,9 +168,10 @@
 <script>
     $(document).ready(function() {
 
-        let table = $('#jadwal').DataTable({
+        let table = new DataTable('#jadwal', {
             responsive: true,
-            autoWidth: false
+            autoWidth: false,
+
         });
 
 

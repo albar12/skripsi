@@ -147,11 +147,11 @@
 <script>
     $(document).ready(function() {
 
-        let table = $('#mapel').DataTable({
+        let table = new DataTable('#mapel', {
             responsive: true,
-            autoWidth: false
-        });
+            autoWidth: false,
 
+        });
 
         $('#addmapel').submit(function(e) {
             e.preventDefault();
