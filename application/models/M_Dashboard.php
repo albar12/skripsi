@@ -107,21 +107,35 @@ class M_Dashboard extends CI_Model
     public function count_alpha()
     {
         if ($this->input->post("dash_tanggal_dari") && $this->input->post("dash_tanggal_sampai")) {
-            $dash_tanggal_dari = $this->input->post("dash_tanggal_dari");
-            $dash_tanggal_sampai = $this->input->post("dash_tanggal_sampai");
-            $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
+            $start = new DateTime($this->input->post("dash_tanggal_dari"));
+            $end = new DateTime($this->input->post("dash_tanggal_sampai"));
         } else {
-            $dash_tanggal_dari = date('Y-m-d');
-            $dash_tanggal_sampai = date('Y-m-d');
-            $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
+            $start = new DateTime(date('Y-m-d'));
+            $end = new DateTime(date('Y-m-d'));
         }
 
-        $this->db->select('id_absensi');
-        $this->db->from('table_absensi');
-        $this->db->where("status", 'Alpha');
-        $query = $this->db->get();
+        $end->modify('+1 day');
 
-        return $query->num_rows();
+        $interval = new DateInterval('P1D');
+        $period = new DatePeriod($start, $interval, $end);
+
+        $total_alpha = 0;
+
+        foreach ($period as $date) {
+            $tgl = $date->format("Y-m-d");
+
+            $this->db->from('table_user u');
+
+            $this->db->join('table_absensi a', "a.id_user = u.id_user AND a.tanggal = '$tgl'", 'left');
+            $this->db->join('table_cuti c', "c.id_user = u.id_user AND c.tanggal = '$tgl'", 'left');
+
+            $this->db->where('a.id_absensi IS NULL');
+            $this->db->where('c.id_cuti IS NULL');
+
+            $total_alpha += $this->db->count_all_results();
+        }
+
+        return $total_alpha;
     }
 
     public function count_cuti()
@@ -225,23 +239,42 @@ class M_Dashboard extends CI_Model
     public function get_jml_alpha()
     {
         if ($this->input->post("dash_tanggal_dari") && $this->input->post("dash_tanggal_sampai")) {
-            $dash_tanggal_dari = $this->input->post("dash_tanggal_dari");
-            $dash_tanggal_sampai = $this->input->post("dash_tanggal_sampai");
-            $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
+            $start = new DateTime($this->input->post("dash_tanggal_dari"));
+            $end = new DateTime($this->input->post("dash_tanggal_sampai"));
         } else {
-            $dash_tanggal_dari = date('Y-m-d');
-            $dash_tanggal_sampai = date('Y-m-d');
-            $this->db->where("table_absensi.tanggal >= '$dash_tanggal_dari' AND table_absensi.tanggal <= '$dash_tanggal_sampai'");
+            $start = new DateTime(date('Y-m-d'));
+            $end = new DateTime(date('Y-m-d'));
         }
 
-        $this->db->select('table_absensi.*, table_user.nama');
-        $this->db->from('table_absensi');
-        $this->db->join('table_user', 'table_user.id_user = table_absensi.id_user');
-        $this->db->where("table_absensi.status", "Alpha");
-        $this->db->order_by("table_absensi.id_absensi", "DESC");
-        $query = $this->db->get();
+        $end->modify('+1 day');
 
-        return $query;
+        $interval = new DateInterval('P1D');
+        $period = new DatePeriod($start, $interval, $end);
+
+        $result = [];
+
+        foreach ($period as $date) {
+            $tgl = $date->format("Y-m-d");
+
+            $this->db->select('u.id_user, u.nama');
+            $this->db->from('table_user u');
+
+            $this->db->join('table_absensi a', "a.id_user = u.id_user AND a.tanggal = '$tgl'", 'left');
+            $this->db->join('table_cuti c', "c.id_user = u.id_user AND c.tanggal = '$tgl'", 'left');
+
+            $this->db->where('a.id_absensi IS NULL');
+            $this->db->where('c.id_cuti IS NULL');
+
+            $query = $this->db->get()->result_array();
+
+            // tambahkan tanggal ke setiap row
+            foreach ($query as $row) {
+                $row['tanggal'] = $tgl;
+                $result[] = $row;
+            }
+        }
+
+        return $result;
     }
 
     public function get_jml_cuti()

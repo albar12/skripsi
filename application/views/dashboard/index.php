@@ -85,7 +85,7 @@
                     </div>
                 </a>
             </div>
-            <!-- 
+
             <div class="col-lg-3 col-6">
                 <a href="#jml_alpha_tab" onclick="showjmlalpha()">
                     <div class="small-box bg-warning">
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                 </a>
-            </div> -->
+            </div>
 
             <div class="col-lg-3 col-6">
                 <a href="#jml_cuti_tab" onclick="showcuti()">

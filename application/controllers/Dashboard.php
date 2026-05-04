@@ -127,20 +127,20 @@ class Dashboard extends CI_Controller
             );
         } elseif ($datatype == 'jml_alpha') {
             $query = $this->M_Dashboard->get_jml_alpha();
-            foreach ($query->result() as $r) {
-                $status = '<span class="badge badge-danger">' . $r->status . '</span>';
+            foreach ($query as $r) {
+                $status = '<span class="badge badge-danger">Alpha</span>';
                 $data[] = [
                     $no++,
-                    $r->nama,
-                    $r->tanggal,
+                    $r['nama'],
+                    $r['tanggal'],
                     $status,
                 ];
             }
 
             $result = array(
                 "draw" => $draw,
-                "recordsTotal" => $query->num_rows(),
-                "recordsFiltered" => $query->num_rows(),
+                "recordsTotal" => count($query),
+                "recordsFiltered" => count($query),
                 "data" => $data
             );
         } elseif ($datatype == 'jml_cuti') {
